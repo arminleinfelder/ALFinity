@@ -189,6 +189,127 @@ html, body {
   }
 }
 
+.sheet-handle {
+  width: 40px;
+  height: 5px;
+  margin: -0.4rem auto 0.6rem;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.25);
+}
+@media (min-width: 768px) { .sheet-handle { display: none; } }
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+  touch-action: none;
+}
+.panel-title { margin: 0; font-size: 1.15rem; }
+
+.panel-section { margin-top: 0.75rem; }
+.panel-section h3 {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.hint { margin: 0.2rem 0 0.75rem; font-size: 0.8rem; color: var(--muted); }
+
+.btn {
+  min-height: var(--tap);
+  padding: 0 1rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.btn:hover:not(:disabled) { background: rgba(255, 255, 255, 0.12); }
+.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.btn:disabled { opacity: 0.4; cursor: default; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #031018; font-weight: 600; }
+.btn.danger { color: var(--danger); }
+
+/* Palette gallery */
+.palette-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+.palette-item { position: relative; }
+.palette {
+  width: 100%;
+  min-height: var(--tap);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.4rem;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+.palette[aria-pressed="true"] { border-color: var(--accent); }
+.palette:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.swatch { display: block; height: 18px; border-radius: 4px; }
+.palette-name { font-size: 0.8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.palette-edit {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.55);
+  color: var(--text);
+  cursor: pointer;
+}
+
+/* Sliders and switches */
+.control-row { display: flex; justify-content: space-between; align-items: baseline; }
+.control-row output { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 0.85rem; }
+.control-inline { display: flex; justify-content: space-between; align-items: center; min-height: var(--tap); }
+input[type="range"] { width: 100%; height: var(--tap); margin: 0; accent-color: var(--accent); }
+input[type="color"] {
+  width: 56px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: none;
+  cursor: pointer;
+}
+.switch { width: 1.4rem; height: 1.4rem; accent-color: var(--accent); }
+
+/* Custom palette editor */
+.field { display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 0.75rem; font-size: 0.9rem; }
+.field input {
+  min-height: var(--tap);
+  padding: 0 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  font: inherit;
+  font-size: 16px; /* prevents iOS from zooming into the field */
+}
+.editor-preview { height: 28px; border-radius: 6px; margin-bottom: 0.75rem; }
+.editor-stops { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.6rem; }
+.stop { display: flex; align-items: center; gap: 0.1rem; }
+.stop .tool { width: 32px; height: 32px; }
+.editor-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+
 /* ---- Debug compare overlay ---- */
 
 .compare-overlay {

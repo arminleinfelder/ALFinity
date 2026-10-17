@@ -15,12 +15,16 @@ export class Renderer {
    * onFrame(view): a new picture of `view` is on screen.
    * onStatus({ state: "rendering" | "done", engine, progress }).
    * onRestored(): the graphics context came back and the picture must be redrawn.
+   * paletteFor(id): the palette for an id (built-in or custom).
    */
-  constructor(canvas, { onFrame = () => {}, onStatus = () => {}, onRestored = () => {} } = {}) {
+  constructor(canvas, {
+    onFrame = () => {}, onStatus = () => {}, onRestored = () => {}, paletteFor = getPalette,
+  } = {}) {
     this.gpu = new GpuEngine(canvas, onRestored);
     this.cpu = new CpuEngine();
     this.onFrame = onFrame;
     this.onStatus = onStatus;
+    this.paletteFor = paletteFor;
     this.last = null;
     this.token = 0;
     this.interactiveScale = 1;
@@ -98,7 +102,7 @@ export class Renderer {
   }
 
   #setColor(color) {
-    this.gpu.setPalette(getPalette(color.paletteId).stops);
+    this.gpu.setPalette(this.paletteFor(color.paletteId).stops);
     this.gpu.setColor(color);
   }
 

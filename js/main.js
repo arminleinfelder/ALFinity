@@ -1,12 +1,15 @@
 // ALFinity startup: wires state, input, renderer and toolbar together.
 
-import { DEFAULT_SETTING } from "./defaults.js";
+import { DEFAULT_SETTING, getPalette } from "./defaults.js";
 import { State } from "./state.js";
 import { clampView, zoomAt } from "./view.js";
 import { attachInput } from "./input.js";
+import { loadPalettes, savePalettes } from "./storage.js";
 import { Renderer } from "./render/renderer.js";
 import { createToolbar } from "./ui/toolbar.js";
 import { createStatus } from "./ui/status.js";
+import { createPanel } from "./ui/panel.js";
+import { createColorsPanel } from "./ui/colors.js";
 
 const canvas = document.getElementById("view");
 const status = createStatus(document.getElementById("status"));
@@ -34,8 +37,20 @@ function start() {
   let frameRequested = false;
   let frameInteractive = true;
   let previewTimer = 0;
+  let recolorRequested = false;
+
+  // ---- Palettes: built-in, the user's own, and an unsaved one being edited ----
+
+  let customPalettes = loadPalettes();
+  let draftPalette = null;
+  let storageWarned = false;
+  const paletteFor = (id) =>
+    (draftPalette?.id === id && draftPalette) ||
+    customPalettes.find((p) => p.id === id) ||
+    getPalette(id);
 
   const renderer = new Renderer(canvas, {
+    paletteFor,
     onFrame(view) {
       renderedView = view;
       updateTransform();
@@ -57,6 +72,24 @@ function start() {
       frameRequested = false;
       draw(frameInteractive);
     });
+  }
+
+  /** Only the colors changed: recolor the picture on screen, at most once per frame (FR-016). */
+  function requestRecolor() {
+    if (recolorRequested) return;
+    recolorRequested = true;
+    requestAnimationFrame(() => {
+      recolorRequested = false;
+      if (!frameRequested) renderer.recolor(state.get());
+    });
+  }
+
+  /** Redraws after a jump in history: recolor if only the colors differ. */
+  function refreshAfter(previous) {
+    const { color: a, ...restA } = previous;
+    const { color: b, ...restB } = state.get();
+    if (JSON.stringify(restA) === JSON.stringify(restB)) requestRecolor();
+    else requestRender(false);
   }
 
   function draw(interactive) {
@@ -121,10 +154,50 @@ function start() {
   const actions = {
     zoomIn: () => applyView((v) => zoomAt(v, W, H, W / 2, H / 2, 2), { record: true }),
     zoomOut: () => applyView((v) => zoomAt(v, W, H, W / 2, H / 2, 0.5), { record: true }),
-    undo: () => state.undo() && requestRender(false),
-    redo: () => state.redo() && requestRender(false),
+    undo: () => {
+      const previous = state.get();
+      if (state.undo()) refreshAfter(previous);
+    },
+    redo: () => {
+      const previous = state.get();
+      if (state.redo()) refreshAfter(previous);
+    },
     reset: () => applyView(() => ({ ...DEFAULT_SETTING.view }), { record: true }),
+    colors: () => panel.toggle("colors", "Colors", () => {
+      colorsPanel.refresh();
+      return colorsPanel.element;
+    }),
   };
+
+  // ---- Colors (US2) ----
+
+  const colorsPanel = createColorsPanel({
+    getColor: () => state.get().color,
+    setColor(color, { record }) {
+      state.set({ ...state.get(), color }, { record });
+      requestRecolor();
+    },
+    getCustomPalettes: () => customPalettes,
+    saveCustomPalettes(list) {
+      customPalettes = list;
+      const ok = savePalettes(list);
+      if (!ok && !storageWarned) {
+        storageWarned = true;
+        status.flash("Your palettes cannot be stored in this browser", 4000);
+      }
+      return ok;
+    },
+    previewPalette(p) {
+      draftPalette = p;
+    },
+  });
+
+  const panel = createPanel(document.getElementById("panel"), {
+    onChange(name) {
+      if (name !== "colors") colorsPanel.cancelEdit();
+      toolbar.setOpenPanel(name);
+    },
+  });
 
   attachInput(canvas, {
     gesture: (fn) => applyView(fn, { record: false }),
@@ -151,7 +224,13 @@ function start() {
   }
   const toolbar = createToolbar(document.getElementById("toolbar"), actions, extra);
   const updateToolbar = () => toolbar.update({ canUndo: state.canUndo, canRedo: state.canRedo });
-  state.subscribe(updateToolbar);
+  let lastColorKey = "";
+  state.subscribe((s) => {
+    updateToolbar();
+    const key = JSON.stringify(s.color);
+    if (key !== lastColorKey && panel.current === "colors") colorsPanel.refresh();
+    lastColorKey = key;
+  });
   updateToolbar();
 
   resize();

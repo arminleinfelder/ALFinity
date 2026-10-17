@@ -101,12 +101,12 @@ Single static project at the repository root (see [plan.md](plan.md) Project Str
 
 ### Implementation for User Story 2
 
-- [ ] T028 [P] [US2] Add at least 10 built-in palettes to `BUILTIN_PALETTES` in `js/defaults.js` (e.g. Ocean, Fire, Rainbow, Sunset, Forest, Ice, Grayscale, Neon, Candy, Gold), each with "2–8 hex colors, evenly spaced, cyclic" and `builtIn: true` (FR-013)
-- [ ] T029 [US2] Implement `js/ui/colors.js` panel: a gallery of palette swatches (preview strip drawn from `buildColorTable`) with names; sliders for Color shift "[0, 1), position offset in the palette; wraps", Color density "[0.1, 20]" (logarithmic slider), a Smooth/Banded toggle, and an Inside color picker (`<input type="color">`, "Hex color `#rrggbb`"); every change calls `state.update` with `record: false` while dragging and `record: true` on release; "Reset colors" restores `DEFAULT_SETTING.color` (FR-014)
-- [ ] T030 [US2] Make color changes call `renderer.recolor` instead of a full render (detect that only `color` changed in `js/main.js`), so recoloring takes < 0.1 s on both engines (FR-016, SC-003)
-- [ ] T031 [US2] Add a custom palette editor in `js/ui/colors.js`: choose "2–8 hex colors", name "1–40 characters", save as `{ id: "custom-<uuid>", name, stops, builtIn: false }`; edit and delete custom palettes (FR-015)
-- [ ] T032 [US2] Implement custom palette persistence in `js/storage.js`: `loadPalettes()` / `savePalettes(list)` under key `alfinity.palettes.v1`, wrapped in try/catch; if storage is unavailable, show "Your palettes cannot be stored in this browser" once
-- [ ] T033 [US2] Add a "Colors" button to `js/ui/toolbar.js` that opens/closes the panel (`#panel`); on phones the panel is a bottom sheet that can be dragged down and covers at most half the picture (FR-007)
+- [X] T028 [P] [US2] Add at least 10 built-in palettes to `BUILTIN_PALETTES` in `js/defaults.js` (e.g. Ocean, Fire, Rainbow, Sunset, Forest, Ice, Grayscale, Neon, Candy, Gold), each with "2–8 hex colors, evenly spaced, cyclic" and `builtIn: true` (FR-013)
+- [X] T029 [US2] Implement `js/ui/colors.js` panel: a gallery of palette swatches (preview strip drawn from `buildColorTable`) with names; sliders for Color shift "[0, 1), position offset in the palette; wraps", Color density "[0.1, 20]" (logarithmic slider), a Smooth/Banded toggle, and an Inside color picker (`<input type="color">`, "Hex color `#rrggbb`"); every change calls `state.update` with `record: false` while dragging and `record: true` on release; "Reset colors" restores `DEFAULT_SETTING.color` (FR-014)
+- [X] T030 [US2] Make color changes call `renderer.recolor` instead of a full render (detect that only `color` changed in `js/main.js`), so recoloring takes < 0.1 s on both engines (FR-016, SC-003)
+- [X] T031 [US2] Add a custom palette editor in `js/ui/colors.js`: choose "2–8 hex colors", name "1–40 characters", save as `{ id: "custom-<uuid>", name, stops, builtIn: false }`; edit and delete custom palettes (FR-015)
+- [X] T032 [US2] Implement custom palette persistence in `js/storage.js`: `loadPalettes()` / `savePalettes(list)` under key `alfinity.palettes.v1`, wrapped in try/catch; if storage is unavailable, show "Your palettes cannot be stored in this browser" once
+- [X] T033 [US2] Add a "Colors" button to `js/ui/toolbar.js` that opens/closes the panel (`#panel`); on phones the panel is a bottom sheet that can be dragged down and covers at most half the picture (FR-007)
 - [ ] T034 [US2] Validate US2 manually with [quickstart.md](quickstart.md) US2, including recoloring at deep zoom (CPU engine)
 
 **Checkpoint**: US1 + US2 work together and on their own
