@@ -14,3 +14,8 @@
 # Environment / secrets
 .env
 .env.*
+
+# Misc
+*.log
+*.swp
+Thumbs.db

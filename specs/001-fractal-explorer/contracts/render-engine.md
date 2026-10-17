@@ -29,17 +29,21 @@ renderer.engineFor(setting, width, height) → "gpu" | "cpu"
 
 ## CPU worker messages
 
+Workers are stateless: every strip message carries the full job parameters.
+
 ```text
-main → worker  { kind: "job", jobId, type, julia, cx, cy, s, width, height,
-                 maxIter, step }      // step = 4 for preview, 1 for full
-worker → main  { kind: "need-strip", jobId }
-main → worker  { kind: "strip", jobId, y0, y1 } | { kind: "idle" }
-worker → main  { kind: "strip-done", jobId, y0, y1, data: Float32Array }  // transferred
+main → worker  { jobId, p: { type, jre, jim, cx, cy, s, W, H, maxIter, step, gw }, y0, y1 }
+               // step = 4 for the preview, 1 for full quality; rows y0..y1 of the grid
+worker → main  { jobId, y0, y1, data: Float32Array }   // transferred, not copied
 ```
 
-Results whose `jobId` is older than the current job are discarded.
+The main thread sends the next strip to whichever worker just finished. Results whose
+`jobId` is older than the current job are discarded and the worker gets a strip of the
+current job.
 
 ## Consistency check
 
-A reference test renders the same small views with both engines and compares ν values
-(within 0.01) and resulting colors, at a zoom level both engines can handle.
+The GPU engine only outputs colors (reading ν back would need a float render target), so
+the check compares colors: `?debug=compare` renders the same view with both engines and
+reports the largest color difference and the share of visibly different pixels
+(see [tests/engines.consistency.md](../../../tests/engines.consistency.md)).

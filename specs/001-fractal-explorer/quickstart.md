@@ -24,7 +24,7 @@ python3 -m http.server 8000
 ## Run the logic tests
 
 ```bash
-node --test tests/
+node --test "tests/*.test.js"
 ```
 
 Expected: all tests pass (fractal math, view mapping, palettes, settings, file/link
