@@ -153,6 +153,10 @@ both show the same view and colors, the 4K one with more detail.
   center and zoom.
 - Browser storage is full, unavailable or blocked (e.g. private browsing): the app explains
   that favorites cannot be stored and offers export as a fallback.
+- The browser deletes the app's stored data on its own (Safari removes a website's data
+  after about 7 days of Safari use without visiting it, unless the site was added to the
+  home screen): the app reduces this risk with FR-019a–FR-019c, so users have a home-screen
+  install and an up-to-date backup file.
 - An imported file is invalid or from a newer app version: the app reports what could not be
   imported and imports the rest.
 - The user starts a new zoom while a render is still running: the old render is abandoned
@@ -213,6 +217,15 @@ both show the same view and colors, the 4K one with more detail.
 - **FR-018**: Users MUST be able to list, open, rename and delete favorites; deletion
   requires confirmation.
 - **FR-019**: Favorites MUST persist on the device across browser restarts.
+- **FR-019a**: When the first favorite is saved, the app MUST ask the browser to keep its
+  data permanently (persistent storage) and remember the answer; no prompt is shown if the
+  browser decides on its own.
+- **FR-019b**: On iPhone and iPad, when the app is not running from the home screen, it
+  MUST show a one-time, dismissible hint after the first favorite is saved, explaining how
+  to add ALFinity to the home screen so favorites are kept.
+- **FR-019c**: After 5 favorites have been saved or changed since the last export, the app
+  MUST show a gentle, dismissible reminder to export a backup file; dismissing it postpones
+  the reminder until 5 more changes. Users MUST be able to turn the reminder off.
 - **FR-020**: Users MUST be able to export all or selected favorites to a single file and
   import such a file, without overwriting existing favorites.
 - **FR-021**: The app SHOULD restore the last viewed setting when reopened.
@@ -270,6 +283,9 @@ both show the same view and colors, the 4K one with more detail.
 
 - Target browsers are current Safari on iPhone/iPad and current Safari and Chrome on macOS;
   older browsers are not supported.
+- Settings are stored only in each visitor's own browser, separately per device and per
+  browser; when the app is hosted publicly (e.g. GitHub Pages), visitors never see each
+  other's data.
 - A single user per device; no accounts, cloud sync or multi-user sharing (moving favorites
   between devices happens via export/import files or links).
 - The interface language is English for the first version.

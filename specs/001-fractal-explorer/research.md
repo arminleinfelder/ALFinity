@@ -124,6 +124,24 @@ Every decision below uses only browser-native APIs; no third-party libraries are
 - **Alternatives considered**: IndexedDB (more capacity, more code; not needed at this
   scale).
 
+## R9a. Keeping favorites safe from automatic deletion (owner decision, 2026-10-17)
+
+Safari (iOS, iPadOS, macOS) deletes all script-written storage of a website — localStorage
+and IndexedDB alike — after about 7 days of Safari use without a visit. Web apps added to
+the home screen are exempt. Three small measures, all browser-native:
+
+- **Persistent storage request** (FR-019a): `navigator.storage.persist()` when the first
+  favorite is saved; result stored in `alfinity.meta.v1`. Chrome grants or denies silently;
+  Safari decides by its own rules. Skipped if `navigator.storage` is missing.
+- **Home-screen hint** (FR-019b): shown once on iPhone/iPad when
+  `navigator.standalone !== true` and `matchMedia("(display-mode: standalone)")` does not
+  match: "Tip: tap Share → Add to Home Screen so Safari keeps your favorites." Works without
+  the manifest; the manifest and icons (Phase 8) make the installed app look right.
+- **Backup reminder** (FR-019c): a counter of favorite saves/changes since the last export
+  in `alfinity.meta.v1`; at 5, a dismissible notice with an "Export now" button.
+- **Alternatives considered**: Cloud sync (needs a server and accounts; violates the
+  "no data leaves the device" constraint).
+
 ## R10. Offline use
 
 - **Decision**: A small service worker caches the app's static files on first load, and a

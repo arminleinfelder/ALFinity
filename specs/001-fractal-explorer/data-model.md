@@ -78,6 +78,7 @@ Any new change clears the redo stack.
 | `alfinity.favorites.v1` | `Favorite[]` |
 | `alfinity.palettes.v1` | custom `Palette[]` |
 | `alfinity.last.v1` | last FractalSetting (FR-021) |
+| `alfinity.meta.v1` | `{ persistRequested: boolean, persistGranted: boolean \| null, installHintShown: boolean, changesSinceExport: integer ≥ 0, backupReminder: boolean (default true) }` (FR-019a–c) |
 
 ## Validation rules
 

@@ -134,7 +134,10 @@ Single static project at the repository root (see [plan.md](plan.md) Project Str
 - [ ] T042 [US3] Add Export and Import buttons to `js/ui/favorites.js`: export downloads `alfinity-favorites-YYYY-MM-DD.alfinity.json` via a Blob link; import uses `<input type="file" accept=".json">`, shows the import summary, regenerates missing thumbnails (FR-020)
 - [ ] T043 [US3] In `js/main.js`: on start, open a `#s=` share link if present (then remove the fragment with `history.replaceState`), else restore `alfinity.last.v1`, else the default (FR-021); save the last setting (debounced 1 s) after each recorded change; add a "Copy link" button that copies `encodeShareLink` to the clipboard (FR-022)
 - [ ] T044 [US3] Add a "Favorites" button to `js/ui/toolbar.js` that opens the favorites panel
-- [ ] T045 [US3] Validate US3 manually with [quickstart.md](quickstart.md) US3 and Share link, including a private window with storage blocked
+- [ ] T061 [US3] Add `loadMeta()` / `saveMeta(partial)` to `js/storage.js` for key `alfinity.meta.v1` with fields `{ persistRequested: boolean, persistGranted: boolean | null, installHintShown: boolean, changesSinceExport: integer ≥ 0, backupReminder: boolean (default true) }`; in `js/ui/favorites.js`, when the first favorite is saved and `persistRequested` is false, call `navigator.storage?.persist?.()` and store the result (FR-019a, [research.md](research.md) R9a). Depends on T039, T041
+- [ ] T062 [US3] In `js/ui/favorites.js`, after the first favorite is saved on iPhone/iPad (detect via `navigator.maxTouchPoints > 1` plus an iOS/iPadOS user agent) and the app is not standalone (`navigator.standalone !== true` and `matchMedia("(display-mode: standalone)")` does not match), show once a dismissible notice: "Tip: tap Share → Add to Home Screen so Safari keeps your favorites." and set `installHintShown` (FR-019b). Depends on T061
+- [ ] T063 [US3] Backup reminder in `js/ui/favorites.js`: increment `changesSinceExport` on every favorite save, rename or delete, reset it to 0 after a successful export (T042); when it reaches 5 and `backupReminder` is true, show a dismissible notice "You have unsaved changes to your favorites — export a backup file?" with buttons "Export now", "Later" (resets the counter to 0) and "Don't remind me" (sets `backupReminder: false`) (FR-019c). Depends on T042, T061
+- [ ] T045 [US3] Validate US3 manually with [quickstart.md](quickstart.md) US3 and Share link, including a private window with storage blocked, the home-screen hint on iPhone/iPad, and the backup reminder after 5 changes
 
 **Checkpoint**: US1–US3 work; nice views are never lost
 
@@ -210,6 +213,7 @@ Single static project at the repository root (see [plan.md](plan.md) Project Str
 - PURE modules and their tests before the code that uses them
 - `shaders.js` (T013) before `gpu.js` (T014); `worker.js` (T015) before `cpu.js` (T016); both before `renderer.js` (T017)
 - `settings.js` (T036–T038) before `storage.js` extension (T039) and favorites UI (T041–T042)
+- Data-safety tasks T061–T063 (added 2026-10-17, numbered after T060 to keep existing IDs stable) run after T042 and before the US3 validation T045
 - Validate each story (its last task) before starting the next
 
 ### Parallel Opportunities

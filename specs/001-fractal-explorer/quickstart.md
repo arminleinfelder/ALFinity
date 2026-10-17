@@ -59,6 +59,14 @@ desktop.
 3. Export; import on another device → same pictures, no overwrites
    ([favorites-file contract](contracts/favorites-file.md)).
 4. In a private window with storage blocked → friendly message, export still works.
+5. Save the first favorite in Chrome → DevTools console:
+   `await navigator.storage.persisted()` returns the stored answer (FR-019a).
+6. On iPhone/iPad in Safari (not from the home screen), save the first favorite → the
+   "Add to Home Screen" tip appears once; reload and save again → it does not reappear
+   (FR-019b). Opened from the home screen → no tip.
+7. Make 5 favorite changes → backup reminder appears; "Later" postpones it for 5 more;
+   "Export now" downloads the file and resets the counter; "Don't remind me" stops it
+   (FR-019c).
 
 ### US4 – Julia
 
