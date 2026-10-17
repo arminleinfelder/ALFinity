@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   pixelToComplex, pointToComplex, complexToPoint, zoomAt, pan,
-  isAtMaxZoom, clampView, engineFor, zoomFactor,
+  isAtMaxZoom, clampView, engineFor, zoomFactor, tileView,
 } from "../js/view.js";
 
 const W = 1600, H = 900;
@@ -52,6 +52,17 @@ test("clampView keeps the view inside the allowed area", () => {
   const { view: v, limited } = clampView({ cx: 10, cy: -10, width: 100 }, W, H);
   assert.deepEqual(v, { cx: 4, cy: -4, width: 8 });
   assert.equal(limited, false);
+});
+
+test("a tile view maps its pixels to the same points as the full picture", () => {
+  const FW = 5000, FH = 3000;
+  const tv = tileView(view, FW, FH, 2048, 1024, 2048, 976);
+  for (const [px, py] of [[0, 0], [100, 500], [2047, 975]]) {
+    const inTile = pixelToComplex(tv, 2048, 976, px, py);
+    const inFull = pixelToComplex(view, FW, FH, 2048 + px, 1024 + py);
+    assert.ok(Math.abs(inTile.re - inFull.re) < 1e-12);
+    assert.ok(Math.abs(inTile.im - inFull.im) < 1e-12);
+  }
 });
 
 test("engine choice: GPU for shallow views, CPU for deep views", () => {

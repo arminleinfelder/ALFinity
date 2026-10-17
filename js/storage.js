@@ -1,8 +1,15 @@
 // Browser storage (localStorage). Every access is wrapped: storage can be full, blocked
 // (private browsing) or unavailable, and the app must keep working without it.
 
+import { validateSetting, newId } from "./settings.js";
+
+export { newId };
+
 const KEYS = {
   palettes: "alfinity.palettes.v1",
+  favorites: "alfinity.favorites.v1",
+  last: "alfinity.last.v1",
+  meta: "alfinity.meta.v1",
 };
 
 const HEX = /^#[0-9a-f]{6}$/i;
@@ -26,12 +33,19 @@ function write(key, value) {
   }
 }
 
-/** A short random id; crypto.randomUUID needs HTTPS, which local network testing lacks. */
-export function newId(prefix) {
-  const uuid = globalThis.crypto?.randomUUID?.() ??
-    `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
-  return `${prefix}${uuid}`;
+/** True if this browser lets the app store anything at all. */
+export function storageAvailable() {
+  try {
+    const probe = "alfinity.probe";
+    localStorage.setItem(probe, "1");
+    localStorage.removeItem(probe);
+    return true;
+  } catch {
+    return false;
+  }
 }
+
+// ---- Custom palettes ----
 
 /** Checks a custom palette: "2–8 hex colors", name "1–40 characters". */
 export function isValidPalette(p) {
@@ -53,4 +67,72 @@ export function loadPalettes() {
 /** Returns false if the palettes could not be stored. */
 export function savePalettes(list) {
   return write(KEYS.palettes, list.map(({ id, name, stops }) => ({ id, name, stops })));
+}
+
+// ---- Favorites ----
+
+/** Favorites saved on this device, each setting validated; broken entries are skipped. */
+export function loadFavorites(knownPaletteIds) {
+  const list = read(KEYS.favorites);
+  if (!Array.isArray(list)) return [];
+  const result = [];
+  for (const f of list) {
+    if (!f || typeof f.id !== "string" || typeof f.name !== "string") continue;
+    const { setting } = validateSetting(f.setting, knownPaletteIds);
+    if (!setting) continue;
+    result.push({
+      id: f.id,
+      name: f.name.trim().slice(0, 60) || "Favorite",
+      setting,
+      thumbnail: typeof f.thumbnail === "string" ? f.thumbnail : null,
+      created: typeof f.created === "string" ? f.created : new Date().toISOString(),
+      modified: typeof f.modified === "string" ? f.modified : new Date().toISOString(),
+    });
+  }
+  return result;
+}
+
+export function saveFavorites(list) {
+  return write(KEYS.favorites, list);
+}
+
+// ---- Last setting (FR-021) ----
+
+export function loadLast(knownPaletteIds) {
+  return validateSetting(read(KEYS.last), knownPaletteIds).setting;
+}
+
+export function saveLast(setting) {
+  return write(KEYS.last, setting);
+}
+
+// ---- App bookkeeping (FR-019a–c) ----
+
+const META_DEFAULTS = {
+  persistRequested: false,
+  persistGranted: null,
+  installHintShown: false,
+  changesSinceExport: 0,
+  backupReminder: true,
+};
+
+export function loadMeta() {
+  const m = read(KEYS.meta);
+  const meta = { ...META_DEFAULTS };
+  if (m && typeof m === "object") {
+    for (const key of Object.keys(META_DEFAULTS)) {
+      if (typeof m[key] === typeof META_DEFAULTS[key] || (key === "persistGranted" && typeof m[key] === "boolean")) {
+        meta[key] = m[key];
+      }
+    }
+    meta.changesSinceExport = Math.max(0, Math.floor(meta.changesSinceExport) || 0);
+  }
+  return meta;
+}
+
+/** Merges `partial` into the stored meta data and returns the result. */
+export function saveMeta(partial) {
+  const meta = { ...loadMeta(), ...partial };
+  write(KEYS.meta, meta);
+  return meta;
 }

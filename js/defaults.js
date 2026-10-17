@@ -35,6 +35,19 @@ export const BUILTIN_PALETTES = deepFreeze([
   palette("gold", "Gold", ["#140a00", "#6e4100", "#d4a017", "#fff1b0", "#8a5a00"]),
 ]);
 
+const juliaView = { cx: 0, cy: 0, width: 3.2 };
+const preset = (id, name, re, im) => ({ id, name, julia: { re, im }, view: juliaView });
+
+/** Named Julia shapes for people who do not want to pick a point (FR-009). */
+export const JULIA_PRESETS = deepFreeze([
+  preset("dragon", "Dragon", -0.8, 0.156),
+  preset("spiral", "Spiral", 0.285, 0.01),
+  preset("snowflake", "Snowflake", -0.4, 0.6),
+  preset("lightning", "Lightning", -0.7269, 0.1889),
+  preset("galaxy", "Galaxy", 0.355, 0.355),
+  preset("coral", "Coral", -0.1, 0.651),
+]);
+
 /** Returns the palette with the given id, falling back to the default palette. */
 export function getPalette(id) {
   return BUILTIN_PALETTES.find((p) => p.id === id) ?? BUILTIN_PALETTES[0];

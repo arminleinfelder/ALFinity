@@ -1,4 +1,4 @@
-// Toolbar: zoom, undo/redo and reset buttons (FR-002, FR-004, FR-005).
+// Toolbar: zoom, undo/redo, reset, and the buttons that open the panels.
 
 const icon = (paths) =>
   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -10,26 +10,32 @@ const ICONS = {
   undo: icon('<path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/>'),
   redo: icon('<path d="M15 14l5-5-5-5"/><path d="M20 9H9a5 5 0 0 0 0 10h3"/>'),
   reset: icon('<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/>'),
+  shape: icon('<path d="M12 12c0-1.7 1.3-3 3-3s3 1.3 3 3-1.3 3-3 3"/><path d="M15 15c-3.3 0-6-2.7-6-6s2.7-6 6-6"/><path d="M6 6.3A9 9 0 1 0 21 12"/>'),
+  favorites: icon('<path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z"/>'),
+  image: icon('<path d="M12 4v11M7 10l5 5 5-5"/><path d="M4 19h16"/>'),
   colors: icon('<path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.6-1.6 0-.9-.7-1.3-.7-2.2 0-.9.7-1.6 1.6-1.6H17a4 4 0 0 0 4-4C21 6.6 17 3 12 3z"/><circle cx="7.5" cy="11" r="1.2"/><circle cx="10.5" cy="7.5" r="1.2"/><circle cx="15" cy="7.5" r="1.2"/>'),
 };
 
 const BUTTONS = [
-  { action: "zoomIn", label: "Zoom in" },
-  { action: "zoomOut", label: "Zoom out" },
-  "sep",
+  { action: "zoomIn", label: "Zoom in", cls: "tool-zoom" },
+  { action: "zoomOut", label: "Zoom out", cls: "tool-zoom" },
+  { sep: "tool-zoom" },
   { action: "undo", label: "Undo" },
   { action: "redo", label: "Redo" },
   { action: "reset", label: "Reset view" },
-  "sep",
+  { sep: "" },
+  { action: "shape", label: "Shape", toggle: true },
   { action: "colors", label: "Colors", toggle: true },
+  { action: "favorites", label: "Favorites", toggle: true },
+  { action: "image", label: "Save image", toggle: true },
 ];
 
 /** `actions` maps action names to functions; `extra` adds text buttons (e.g. debug tools). */
 export function createToolbar(el, actions, extra = []) {
   const buttons = BUTTONS.map((b) =>
-    b === "sep"
-      ? '<span class="tool-sep" aria-hidden="true"></span>'
-      : `<button type="button" class="tool" data-action="${b.action}"
+    "sep" in b
+      ? `<span class="tool-sep ${b.sep}" aria-hidden="true"></span>`
+      : `<button type="button" class="tool ${b.cls ?? ""}" data-action="${b.action}"
                  ${b.toggle ? 'aria-pressed="false"' : ""}
                  aria-label="${b.label}" title="${b.label}">${ICONS[b.action]}</button>`,
   );

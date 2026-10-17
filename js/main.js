@@ -1,19 +1,28 @@
-// ALFinity startup: wires state, input, renderer and toolbar together.
+// ALFinity startup: wires state, input, renderer, toolbar and panels together.
 
-import { DEFAULT_SETTING, getPalette } from "./defaults.js";
+import { DEFAULT_SETTING, BUILTIN_PALETTES, getPalette } from "./defaults.js";
 import { State } from "./state.js";
 import { clampView, zoomAt } from "./view.js";
 import { attachInput } from "./input.js";
-import { loadPalettes, savePalettes } from "./storage.js";
+import { validateSetting, encodeShareLink, decodeShareLink, newId } from "./settings.js";
+import {
+  loadPalettes, savePalettes, loadFavorites, saveFavorites, loadLast, saveLast,
+} from "./storage.js";
 import { Renderer } from "./render/renderer.js";
 import { createToolbar } from "./ui/toolbar.js";
 import { createStatus } from "./ui/status.js";
 import { createPanel } from "./ui/panel.js";
 import { createColorsPanel } from "./ui/colors.js";
+import { createFavoritesPanel } from "./ui/favorites.js";
+import { createShapePanel } from "./ui/julia.js";
+import { createImagePanel } from "./ui/image.js";
+
+const START_VIEWS = { mandelbrot: DEFAULT_SETTING.view, julia: { cx: 0, cy: 0, width: 3.2 } };
 
 const canvas = document.getElementById("view");
 const status = createStatus(document.getElementById("status"));
-const debugMode = new URLSearchParams(location.search).get("debug");
+const params = new URLSearchParams(location.search);
+const debugMode = params.get("debug");
 
 function supportsWebGL2() {
   try {
@@ -25,12 +34,70 @@ function supportsWebGL2() {
 
 if (supportsWebGL2()) {
   start();
+  registerServiceWorker();
 } else {
   status.error("This browser is not supported. Please use a current Safari or Chrome.");
 }
 
+/** Offline support (research.md R10). Needs HTTPS or localhost; ?nosw turns it off. */
+function registerServiceWorker() {
+  if (!("serviceWorker" in navigator) || !window.isSecureContext || params.has("nosw")) return;
+  navigator.serviceWorker.register("sw.js").catch((err) => console.warn("ALFinity: offline mode unavailable", err));
+}
+
 function start() {
-  const state = new State(DEFAULT_SETTING);
+  const builtinIds = BUILTIN_PALETTES.map((p) => p.id);
+
+  // ---- Palettes: built-in, the user's own, and an unsaved one being edited ----
+
+  let customPalettes = loadPalettes();
+  let draftPalette = null;
+  let paletteWarned = false;
+  const knownPaletteIds = () => [...builtinIds, ...customPalettes.map((p) => p.id)];
+  const paletteFor = (id) =>
+    (draftPalette?.id === id && draftPalette) ||
+    customPalettes.find((p) => p.id === id) ||
+    getPalette(id);
+
+  function storePalettes(list) {
+    customPalettes = list;
+    const ok = savePalettes(list);
+    if (!ok && !paletteWarned) {
+      paletteWarned = true;
+      status.flash("Your palettes cannot be stored in this browser", 4000);
+    }
+    return ok;
+  }
+
+  /** Makes a palette from a share link available here; returns the id to use. */
+  function adoptSharedPalette({ id, stops }) {
+    const same = customPalettes.find((p) => p.stops.join() === stops.join());
+    if (same) return same.id;
+    const newPaletteId = customPalettes.some((p) => p.id === id) || !id.startsWith("custom-") ? newId("custom-") : id;
+    storePalettes([...customPalettes, { id: newPaletteId, name: "Shared palette", stops, builtIn: false }]);
+    return newPaletteId;
+  }
+
+  // ---- Start picture: share link, else the last view, else the default (FR-021, FR-022) ----
+
+  let initial = DEFAULT_SETTING;
+  if (location.hash.startsWith("#s=")) {
+    const link = decodeShareLink(location.hash, knownPaletteIds());
+    if (link) {
+      initial = link.setting;
+      if (link.palette) {
+        initial = { ...initial, color: { ...initial.color, paletteId: adoptSharedPalette(link.palette) } };
+      }
+    } else {
+      setTimeout(() => status.flash("This link could not be opened — showing the start picture", 4000), 0);
+    }
+    history.replaceState(null, "", location.pathname + location.search);
+  } else {
+    initial = loadLast(knownPaletteIds()) ?? DEFAULT_SETTING;
+  }
+
+  const state = new State(initial);
+  let favorites = loadFavorites(knownPaletteIds());
   let W = 0;
   let H = 0;
   let renderedView = null; // view of the picture currently on the canvas
@@ -38,16 +105,7 @@ function start() {
   let frameInteractive = true;
   let previewTimer = 0;
   let recolorRequested = false;
-
-  // ---- Palettes: built-in, the user's own, and an unsaved one being edited ----
-
-  let customPalettes = loadPalettes();
-  let draftPalette = null;
-  let storageWarned = false;
-  const paletteFor = (id) =>
-    (draftPalette?.id === id && draftPalette) ||
-    customPalettes.find((p) => p.id === id) ||
-    getPalette(id);
+  const typeViews = { ...START_VIEWS };
 
   const renderer = new Renderer(canvas, {
     paletteFor,
@@ -84,7 +142,7 @@ function start() {
     });
   }
 
-  /** Redraws after a jump in history: recolor if only the colors differ. */
+  /** Redraws after a jump (undo, opening a favorite): recolor if only the colors differ. */
   function refreshAfter(previous) {
     const { color: a, ...restA } = previous;
     const { color: b, ...restB } = state.get();
@@ -141,7 +199,7 @@ function start() {
       .addEventListener("change", () => { resize(); watchPixelRatio(); }, { once: true });
   })();
 
-  // ---- Changing the view ----
+  // ---- Changing the setting ----
 
   function applyView(fn, { record }) {
     const s = state.get();
@@ -149,6 +207,27 @@ function start() {
     if (limited) status.flash("Maximum zoom reached");
     state.set({ ...s, view }, { record });
     requestRender(!record);
+  }
+
+  /** Any change to the whole setting (panels, favorites): validated and view-clamped. */
+  function applySetting(next, { record }) {
+    const previous = state.get();
+    const { setting } = validateSetting(next, [...knownPaletteIds(), ...(draftPalette ? [draftPalette.id] : [])]);
+    if (!setting) return;
+    const { view, limited } = clampView(setting.view, W || 1, H || 1);
+    if (limited) status.flash("Maximum zoom reached");
+    state.set({ ...setting, view }, { record });
+    const { color: a, ...restA } = previous;
+    const { color: b, ...restB } = state.get();
+    if (JSON.stringify(restA) === JSON.stringify(restB)) requestRecolor();
+    else requestRender(!record);
+  }
+
+  /** Mandelbrot ⇄ Julia; each type remembers its own view (FR-008). */
+  function setType(type) {
+    const s = state.get();
+    typeViews[s.type] = s.view;
+    applySetting({ ...s, type, view: { ...typeViews[type] } }, { record: true });
   }
 
   const actions = {
@@ -162,14 +241,11 @@ function start() {
       const previous = state.get();
       if (state.redo()) refreshAfter(previous);
     },
-    reset: () => applyView(() => ({ ...DEFAULT_SETTING.view }), { record: true }),
-    colors: () => panel.toggle("colors", "Colors", () => {
-      colorsPanel.refresh();
-      return colorsPanel.element;
-    }),
+    // Reset returns to the start framing of the current type.
+    reset: () => applyView(() => ({ ...START_VIEWS[state.get().type] }), { record: true }),
   };
 
-  // ---- Colors (US2) ----
+  // ---- Panels ----
 
   const colorsPanel = createColorsPanel({
     getColor: () => state.get().color,
@@ -178,19 +254,59 @@ function start() {
       requestRecolor();
     },
     getCustomPalettes: () => customPalettes,
-    saveCustomPalettes(list) {
-      customPalettes = list;
-      const ok = savePalettes(list);
-      if (!ok && !storageWarned) {
-        storageWarned = true;
-        status.flash("Your palettes cannot be stored in this browser", 4000);
-      }
-      return ok;
-    },
+    saveCustomPalettes: storePalettes,
     previewPalette(p) {
       draftPalette = p;
     },
   });
+
+  const favoritesPanel = createFavoritesPanel({
+    getSetting: () => state.get(),
+    openSetting: (setting) => applySetting(structuredClone(setting), { record: true }),
+    makeThumbnail: (setting) => renderer.thumbnail(setting),
+    getFavorites: () => favorites,
+    setFavorites(list) {
+      favorites = list;
+      return saveFavorites(list);
+    },
+    getCustomPalettes: () => customPalettes,
+    addPalettes: (list) => storePalettes([...customPalettes, ...list]),
+    builtinPaletteIds: builtinIds,
+    shareLink() {
+      const s = state.get();
+      const custom = customPalettes.find((p) => p.id === s.color.paletteId) ?? null;
+      return `${location.origin}${location.pathname}${encodeShareLink(s, custom)}`;
+    },
+    status,
+  });
+
+  const shapePanel = createShapePanel({
+    getSetting: () => state.get(),
+    setSetting: applySetting,
+    setType,
+    renderPixels: (setting, w, h) => renderer.renderPixels(setting, w, h),
+    status,
+  });
+
+  const imagePanel = createImagePanel({
+    getSetting: () => state.get(),
+    getScreenSize: () => ({ W, H }),
+    renderer,
+    status,
+  });
+
+  const panels = {
+    shape: { title: "Shape", ui: shapePanel },
+    colors: { title: "Colors", ui: colorsPanel },
+    favorites: { title: "Favorites", ui: favoritesPanel },
+    image: { title: "Save image", ui: imagePanel },
+  };
+  for (const [name, { title, ui }] of Object.entries(panels)) {
+    actions[name] = () => panel.toggle(name, title, () => {
+      ui.refresh();
+      return ui.element;
+    });
+  }
 
   const panel = createPanel(document.getElementById("panel"), {
     onChange(name) {
@@ -206,7 +322,7 @@ function start() {
       requestRender(false);
     },
     step: (fn) => applyView(fn, { record: true }),
-    reset: actions.reset,
+    reset: () => actions.reset(),
     undo: actions.undo,
     redo: actions.redo,
   });
@@ -224,12 +340,23 @@ function start() {
   }
   const toolbar = createToolbar(document.getElementById("toolbar"), actions, extra);
   const updateToolbar = () => toolbar.update({ canUndo: state.canUndo, canRedo: state.canRedo });
-  let lastColorKey = "";
+
+  // ---- Keep panels in sync and remember the last view ----
+
+  let lastColorKey = JSON.stringify(state.get().color);
+  let saveTimer = 0;
   state.subscribe((s) => {
     updateToolbar();
-    const key = JSON.stringify(s.color);
-    if (key !== lastColorKey && panel.current === "colors") colorsPanel.refresh();
-    lastColorKey = key;
+    const colorKey = JSON.stringify(s.color);
+    if (colorKey !== lastColorKey) shapePanel.invalidatePictures();
+    if (panel.current === "colors" && colorKey !== lastColorKey) colorsPanel.refresh();
+    if (panel.current === "shape") shapePanel.refresh();
+    lastColorKey = colorKey;
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+      // Never store an unsaved palette that is still being edited.
+      if (!draftPalette || s.color.paletteId !== draftPalette.id) saveLast(s);
+    }, 1000);
   });
   updateToolbar();
 

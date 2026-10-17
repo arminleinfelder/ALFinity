@@ -79,6 +79,16 @@ export function clampView(view, W, H) {
   return { view: { cx, cy, width }, limited: view.width < min };
 }
 
+/**
+ * The view of one tile (x0, y0, tw×th pixels) of a W×H picture: same pixel size, centered
+ * on the tile. Rendering every tile with its own view gives the same pixels as one big render.
+ */
+export function tileView(view, W, H, x0, y0, tw, th) {
+  const s = pixelScale(view, W, H);
+  const c = pointToComplex(view, W, H, x0 + tw / 2, y0 + th / 2);
+  return { cx: c.re, cy: c.im, width: s * Math.min(tw, th) };
+}
+
 /** Which render engine can draw this view without visible precision loss. */
 export function engineFor(view, W, H) {
   return pixelScale(view, W, H) >= magnitude(view) * GPU_PRECISION ? "gpu" : "cpu";

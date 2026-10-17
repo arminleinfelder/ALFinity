@@ -18,8 +18,10 @@ export function createPanel(el, { onChange = () => {} } = {}) {
   const title = el.querySelector(".panel-title");
   const body = el.querySelector(".panel-body");
   let current = null;
+  let opener = null; // element to return keyboard focus to
 
   function open(name, heading, content) {
+    if (!current) opener = document.activeElement;
     current = name;
     title.textContent = heading;
     el.setAttribute("aria-label", heading);
@@ -27,6 +29,7 @@ export function createPanel(el, { onChange = () => {} } = {}) {
     el.hidden = false;
     el.style.transform = "";
     onChange(current);
+    el.querySelector("[data-close]").focus({ preventScroll: true });
   }
 
   function close() {
@@ -34,6 +37,8 @@ export function createPanel(el, { onChange = () => {} } = {}) {
     current = null;
     el.hidden = true;
     onChange(null);
+    if (opener?.isConnected) opener.focus({ preventScroll: true });
+    opener = null;
   }
 
   el.querySelector("[data-close]").addEventListener("click", close);

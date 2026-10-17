@@ -121,22 +121,22 @@ Single static project at the repository root (see [plan.md](plan.md) Project Str
 
 ### Tests for User Story 3
 
-- [ ] T035 [P] [US3] Write `tests/settings.test.js`: `validateSetting` drops unknown fields, clamps out-of-range numbers (e.g. `detail` to [0.25, 4], `maxIter` to [50, 10000], `density` to [0.1, 20]), rejects non-finite numbers, falls back to palette "ocean" for unknown palettes; share-link encode→decode round trip keeps full number precision; favorites-file encode→decode round trip; import with an existing id assigns a new id; a file with `app ≠ "ALFinity"` is rejected; a newer `formatVersion` is imported with a warning
+- [X] T035 [P] [US3] Write `tests/settings.test.js`: `validateSetting` drops unknown fields, clamps out-of-range numbers (e.g. `detail` to [0.25, 4], `maxIter` to [50, 10000], `density` to [0.1, 20]), rejects non-finite numbers, falls back to palette "ocean" for unknown palettes; share-link encode→decode round trip keeps full number precision; favorites-file encode→decode round trip; import with an existing id assigns a new id; a file with `app ≠ "ALFinity"` is rejected; a newer `formatVersion` is imported with a warning
 
 ### Implementation for User Story 3
 
-- [ ] T036 [US3] Implement PURE `js/settings.js` per [data-model.md](data-model.md) Validation rules: `validateSetting(obj, knownPaletteIds) → { setting, warnings }` enforcing `type` `"mandelbrot" | "julia"`, `julia` re/im "each in [−2, 2]", `view.cx`/`view.cy` "finite, each in [−4, 4]", `view.width` "at most 8" and > 0, `detail` "[0.25, 4], default 1", `maxIter` "`null` = Auto; otherwise [50, 10000]", ColorSetting fields with their ranges, `schemaVersion` 1
-- [ ] T037 [US3] Add share-link encoding to `js/settings.js` per [contracts/share-link.md](contracts/share-link.md): `encodeShareLink(setting, customPalette?)` → `#s=<base64url(JSON)>` with the short keys `v t j c d i k p`, and `decodeShareLink(hash)` (UTF-8 safe base64url, full precision numbers)
-- [ ] T038 [US3] Add favorites-file encoding to `js/settings.js` per [contracts/favorites-file.md](contracts/favorites-file.md): `buildFavoritesFile(favorites, customPalettes)` (only palettes used by the exported favorites), `parseFavoritesFile(json, existing) → { favorites, palettes, summary }` applying the "import never overwrites" rules and listing skipped entries
-- [ ] T039 [US3] Extend `js/storage.js`: favorites under `alfinity.favorites.v1` (`{ id: crypto.randomUUID(), name "1–60 characters, trimmed; duplicates allowed", setting, thumbnail, created, modified }` with ISO 8601 timestamps), and the last setting under `alfinity.last.v1`; all reads validated with `validateSetting`; all writes in try/catch with a quota/unavailable message that suggests export (spec edge case)
-- [ ] T040 [US3] Add `renderer.thumbnail(setting) → dataURL` in `js/render/renderer.js`: render at 192×108 (GPU engine, or CPU engine at deep zoom) and encode with `canvas.toDataURL("image/jpeg", 0.8)`
-- [ ] T041 [US3] Implement `js/ui/favorites.js` panel: "Save" (name prompt in an in-page dialog, default name "Favorite N"), list with thumbnail, name and date, tap to open (recorded in undo history), rename inline, delete with an in-page confirmation (FR-017, FR-018)
-- [ ] T042 [US3] Add Export and Import buttons to `js/ui/favorites.js`: export downloads `alfinity-favorites-YYYY-MM-DD.alfinity.json` via a Blob link; import uses `<input type="file" accept=".json">`, shows the import summary, regenerates missing thumbnails (FR-020)
-- [ ] T043 [US3] In `js/main.js`: on start, open a `#s=` share link if present (then remove the fragment with `history.replaceState`), else restore `alfinity.last.v1`, else the default (FR-021); save the last setting (debounced 1 s) after each recorded change; add a "Copy link" button that copies `encodeShareLink` to the clipboard (FR-022)
-- [ ] T044 [US3] Add a "Favorites" button to `js/ui/toolbar.js` that opens the favorites panel
-- [ ] T061 [US3] Add `loadMeta()` / `saveMeta(partial)` to `js/storage.js` for key `alfinity.meta.v1` with fields `{ persistRequested: boolean, persistGranted: boolean | null, installHintShown: boolean, changesSinceExport: integer ≥ 0, backupReminder: boolean (default true) }`; in `js/ui/favorites.js`, when the first favorite is saved and `persistRequested` is false, call `navigator.storage?.persist?.()` and store the result (FR-019a, [research.md](research.md) R9a). Depends on T039, T041
-- [ ] T062 [US3] In `js/ui/favorites.js`, after the first favorite is saved on iPhone/iPad (detect via `navigator.maxTouchPoints > 1` plus an iOS/iPadOS user agent) and the app is not standalone (`navigator.standalone !== true` and `matchMedia("(display-mode: standalone)")` does not match), show once a dismissible notice: "Tip: tap Share → Add to Home Screen so Safari keeps your favorites." and set `installHintShown` (FR-019b). Depends on T061
-- [ ] T063 [US3] Backup reminder in `js/ui/favorites.js`: increment `changesSinceExport` on every favorite save, rename or delete, reset it to 0 after a successful export (T042); when it reaches 5 and `backupReminder` is true, show a dismissible notice "You have unsaved changes to your favorites — export a backup file?" with buttons "Export now", "Later" (resets the counter to 0) and "Don't remind me" (sets `backupReminder: false`) (FR-019c). Depends on T042, T061
+- [X] T036 [US3] Implement PURE `js/settings.js` per [data-model.md](data-model.md) Validation rules: `validateSetting(obj, knownPaletteIds) → { setting, warnings }` enforcing `type` `"mandelbrot" | "julia"`, `julia` re/im "each in [−2, 2]", `view.cx`/`view.cy` "finite, each in [−4, 4]", `view.width` "at most 8" and > 0, `detail` "[0.25, 4], default 1", `maxIter` "`null` = Auto; otherwise [50, 10000]", ColorSetting fields with their ranges, `schemaVersion` 1
+- [X] T037 [US3] Add share-link encoding to `js/settings.js` per [contracts/share-link.md](contracts/share-link.md): `encodeShareLink(setting, customPalette?)` → `#s=<base64url(JSON)>` with the short keys `v t j c d i k p`, and `decodeShareLink(hash)` (UTF-8 safe base64url, full precision numbers)
+- [X] T038 [US3] Add favorites-file encoding to `js/settings.js` per [contracts/favorites-file.md](contracts/favorites-file.md): `buildFavoritesFile(favorites, customPalettes)` (only palettes used by the exported favorites), `parseFavoritesFile(json, existing) → { favorites, palettes, summary }` applying the "import never overwrites" rules and listing skipped entries
+- [X] T039 [US3] Extend `js/storage.js`: favorites under `alfinity.favorites.v1` (`{ id: crypto.randomUUID(), name "1–60 characters, trimmed; duplicates allowed", setting, thumbnail, created, modified }` with ISO 8601 timestamps), and the last setting under `alfinity.last.v1`; all reads validated with `validateSetting`; all writes in try/catch with a quota/unavailable message that suggests export (spec edge case)
+- [X] T040 [US3] Add `renderer.thumbnail(setting) → dataURL` in `js/render/renderer.js`: render at 192×108 (GPU engine, or CPU engine at deep zoom) and encode with `canvas.toDataURL("image/jpeg", 0.8)`
+- [X] T041 [US3] Implement `js/ui/favorites.js` panel: "Save" (name prompt in an in-page dialog, default name "Favorite N"), list with thumbnail, name and date, tap to open (recorded in undo history), rename inline, delete with an in-page confirmation (FR-017, FR-018)
+- [X] T042 [US3] Add Export and Import buttons to `js/ui/favorites.js`: export downloads `alfinity-favorites-YYYY-MM-DD.alfinity.json` via a Blob link; import uses `<input type="file" accept=".json">`, shows the import summary, regenerates missing thumbnails (FR-020)
+- [X] T043 [US3] In `js/main.js`: on start, open a `#s=` share link if present (then remove the fragment with `history.replaceState`), else restore `alfinity.last.v1`, else the default (FR-021); save the last setting (debounced 1 s) after each recorded change; add a "Copy link" button that copies `encodeShareLink` to the clipboard (FR-022)
+- [X] T044 [US3] Add a "Favorites" button to `js/ui/toolbar.js` that opens the favorites panel
+- [X] T061 [US3] Add `loadMeta()` / `saveMeta(partial)` to `js/storage.js` for key `alfinity.meta.v1` with fields `{ persistRequested: boolean, persistGranted: boolean | null, installHintShown: boolean, changesSinceExport: integer ≥ 0, backupReminder: boolean (default true) }`; in `js/ui/favorites.js`, when the first favorite is saved and `persistRequested` is false, call `navigator.storage?.persist?.()` and store the result (FR-019a, [research.md](research.md) R9a). Depends on T039, T041
+- [X] T062 [US3] In `js/ui/favorites.js`, after the first favorite is saved on iPhone/iPad (detect via `navigator.maxTouchPoints > 1` plus an iOS/iPadOS user agent) and the app is not standalone (`navigator.standalone !== true` and `matchMedia("(display-mode: standalone)")` does not match), show once a dismissible notice: "Tip: tap Share → Add to Home Screen so Safari keeps your favorites." and set `installHintShown` (FR-019b). Depends on T061
+- [X] T063 [US3] Backup reminder in `js/ui/favorites.js`: increment `changesSinceExport` on every favorite save, rename or delete, reset it to 0 after a successful export (T042); when it reaches 5 and `backupReminder` is true, show a dismissible notice "You have unsaved changes to your favorites — export a backup file?" with buttons "Export now", "Later" (resets the counter to 0) and "Don't remind me" (sets `backupReminder: false`) (FR-019c). Depends on T042, T061
 - [ ] T045 [US3] Validate US3 manually with [quickstart.md](quickstart.md) US3 and Share link, including a private window with storage blocked, the home-screen hint on iPhone/iPad, and the backup reminder after 5 changes
 
 **Checkpoint**: US1–US3 work; nice views are never lost
@@ -151,10 +151,10 @@ Single static project at the repository root (see [plan.md](plan.md) Project Str
 
 ### Implementation for User Story 4
 
-- [ ] T046 [P] [US4] Add `JULIA_PRESETS` to `js/defaults.js`: at least 6 named points (e.g. Dragon −0.8+0.156i, Spiral 0.285+0.01i, Snowflake −0.4+0.6i, Lightning −0.7269+0.1889i, Galaxy 0.355+0.355i, Coral −0.1+0.651i), each with a default view
-- [ ] T047 [US4] Add a Mandelbrot/Julia switch to `js/ui/toolbar.js`: switching to Julia sets `type: "julia"`, uses the current `julia` point and resets the view to center (0, 0), width 3.2; switching back restores the Mandelbrot view from before (FR-008)
-- [ ] T048 [US4] Implement `js/ui/julia.js`: a small Mandelbrot mini-map (its own small canvas rendered with the GPU engine) with a draggable marker for the Julia point; dragging updates `julia` continuously without recording history (preview quality) and records on release; a list of preset buttons with tiny thumbnails (FR-009)
-- [ ] T049 [US4] Implement `js/ui/details.js`: a collapsible "Details" section (closed by default) showing and editing Julia point re/im, center, zoom, "More detail" slider ("[0.25, 4], default 1"), and an Auto/manual max-iterations field ("[50, 10000]"), each with a one-sentence plain-language explanation; invalid input is clamped with a short note (FR-010, FR-011)
+- [X] T046 [P] [US4] Add `JULIA_PRESETS` to `js/defaults.js`: at least 6 named points (e.g. Dragon −0.8+0.156i, Spiral 0.285+0.01i, Snowflake −0.4+0.6i, Lightning −0.7269+0.1889i, Galaxy 0.355+0.355i, Coral −0.1+0.651i), each with a default view
+- [X] T047 [US4] Add a Mandelbrot/Julia switch to `js/ui/toolbar.js`: switching to Julia sets `type: "julia"`, uses the current `julia` point and resets the view to center (0, 0), width 3.2; switching back restores the Mandelbrot view from before (FR-008)
+- [X] T048 [US4] Implement `js/ui/julia.js`: a small Mandelbrot mini-map (its own small canvas rendered with the GPU engine) with a draggable marker for the Julia point; dragging updates `julia` continuously without recording history (preview quality) and records on release; a list of preset buttons with tiny thumbnails (FR-009)
+- [X] T049 [US4] Implement `js/ui/details.js`: a collapsible "Details" section (closed by default) showing and editing Julia point re/im, center, zoom, "More detail" slider ("[0.25, 4], default 1"), and an Auto/manual max-iterations field ("[50, 10000]"), each with a one-sentence plain-language explanation; invalid input is clamped with a short note (FR-010, FR-011)
 - [ ] T050 [US4] Validate US4 manually with [quickstart.md](quickstart.md) US4 on phone and desktop
 
 **Checkpoint**: US1–US4 work
@@ -169,9 +169,9 @@ Single static project at the repository root (see [plan.md](plan.md) Project Str
 
 ### Implementation for User Story 5
 
-- [ ] T051 [US5] Add `renderer.renderTile(setting, fullW, fullH, rect)` in `js/render/renderer.js` per [contracts/render-engine.md](contracts/render-engine.md): renders the given sub-rectangle of a large image (choosing the engine by the *export* pixel size) into an RGBA pixel buffer
-- [ ] T052 [US5] Implement `js/export.js`: `exportImage(setting, W, H, onProgress) → Blob` rendering tiles of ≤ 2048 px per side, drawing them into one 2D canvas and saving with `canvas.toBlob("image/png")`; yields between tiles so the UI stays responsive (SC-007); can be cancelled; before starting, if `W × H` exceeds 16.7 megapixels on iOS/iPadOS (or the browser's canvas limit), show "This size is too large for this device — try 4K" (spec edge case)
-- [ ] T053 [US5] Add an "Save image" dialog in `js/ui/toolbar.js`: sizes Screen (canvas pixel size), Wallpaper HD 1920×1080, 4K 3840×2160, custom up to 7680×4320 (FR-023); the aspect ratio of the chosen size keeps the same framing via the `view.width` rule; shows progress and a Cancel button; downloads `alfinity-YYYYMMDD-HHMMSS.png`
+- [X] T051 [US5] Add `renderer.renderTile(setting, fullW, fullH, rect)` in `js/render/renderer.js` per [contracts/render-engine.md](contracts/render-engine.md): renders the given sub-rectangle of a large image (choosing the engine by the *export* pixel size) into an RGBA pixel buffer
+- [X] T052 [US5] Implement `js/export.js`: `exportImage(setting, W, H, onProgress) → Blob` rendering tiles of ≤ 2048 px per side, drawing them into one 2D canvas and saving with `canvas.toBlob("image/png")`; yields between tiles so the UI stays responsive (SC-007); can be cancelled; before starting, if `W × H` exceeds 16.7 megapixels on iOS/iPadOS (or the browser's canvas limit), show "This size is too large for this device — try 4K" (spec edge case)
+- [X] T053 [US5] Add an "Save image" dialog in `js/ui/toolbar.js`: sizes Screen (canvas pixel size), Wallpaper HD 1920×1080, 4K 3840×2160, custom up to 7680×4320 (FR-023); the aspect ratio of the chosen size keeps the same framing via the `view.width` rule; shows progress and a Cancel button; downloads `alfinity-YYYYMMDD-HHMMSS.png`
 - [ ] T054 [US5] Validate US5 manually with [quickstart.md](quickstart.md) US5, including the 8K warning on iPhone
 
 **Checkpoint**: All five user stories work
@@ -182,12 +182,12 @@ Single static project at the repository root (see [plan.md](plan.md) Project Str
 
 **Purpose**: Offline use, accessibility, final validation
 
-- [ ] T055 [P] Create `manifest.webmanifest` (name "ALFinity", `display: "standalone"`, dark theme color, icons) and app icons `icons/icon-192.png`, `icons/icon-512.png`, `icons/apple-touch-icon.png` (render them from a nice ALFinity view via the image export); link them from `index.html`
-- [ ] T056 [P] Create `sw.js`: on install cache all static files (`index.html`, `css/app.css`, all `js/**` files, manifest, icons) under a versioned cache name; serve cache-first; delete old caches on activate; register it from `js/main.js` (skip on `localhost` when `?nosw` is set, for development) ([research.md](research.md) R10)
-- [ ] T057 [P] Accessibility pass in `index.html`, `css/app.css` and `js/ui/*.js`: every button has an `aria-label`, panels are reachable by keyboard, focus is visible, `prefers-reduced-motion` disables panel animations, color contrast of UI text ≥ 4.5:1
+- [X] T055 [P] Create `manifest.webmanifest` (name "ALFinity", `display: "standalone"`, dark theme color, icons) and app icons `icons/icon-192.png`, `icons/icon-512.png`, `icons/apple-touch-icon.png` (render them from a nice ALFinity view via the image export); link them from `index.html`
+- [X] T056 [P] Create `sw.js`: on install cache all static files (`index.html`, `css/app.css`, all `js/**` files, manifest, icons) under a versioned cache name; serve cache-first; delete old caches on activate; register it from `js/main.js` (skip on `localhost` when `?nosw` is set, for development) ([research.md](research.md) R10)
+- [X] T057 [P] Accessibility pass in `index.html`, `css/app.css` and `js/ui/*.js`: every button has an `aria-label`, panels are reachable by keyboard, focus is visible, `prefers-reduced-motion` disables panel animations, color contrast of UI text ≥ 4.5:1
 - [ ] T058 Performance check against SC-001, SC-002, SC-003 and SC-007 on a recent iPhone and the MacBook with 4K monitor (Chrome DevTools Performance panel); record results in `specs/001-fractal-explorer/quickstart.md` under a new "Measured results" section and propose any further speed-ups to the owner before adding them (Constitution IV)
 - [ ] T059 Run the full [quickstart.md](quickstart.md) validation on iPhone, iPad and 4K desktop (constitution Development Workflow), plus `node --test "tests/*.test.js"`, and fix any issues found
-- [ ] T060 [P] Update `README.md` with features, keyboard shortcuts and a screenshot
+- [X] T060 [P] Update `README.md` with features, keyboard shortcuts and a screenshot
 
 ---
 
@@ -268,6 +268,24 @@ Task: "Implement PURE js/settings.js validation (T036)"
 7. Polish → offline, accessibility, measured performance
 
 ---
+
+## Implementation deviations (2026-10-17)
+
+- **T047–T049**: instead of a type switch in the toolbar plus separate panels, one **Shape**
+  panel (toolbar button) holds the Mandelbrot/Julia switch, the mini-map, presets and the
+  Details section (`js/ui/julia.js`, `js/ui/details.js`). Fewer toolbar buttons fit on phones.
+- **T053**: the "Save image" dialog is a panel (`js/ui/image.js`) like the others, using
+  `js/export.js`; tiles are 1024 px on the GPU (shorter page stalls) and 2048 px on the CPU.
+- **T040/T051**: `renderer.renderPixels()` renders any setting offscreen with its own CPU
+  workers, so thumbnails, presets and exports never interrupt the picture on screen; tiles
+  use `tileView()` in `js/view.js` (tested).
+- **T055**: icons are drawn by `scripts/make-icons.mjs` (Node built-ins, same fractal code)
+  instead of via the in-app export.
+- **T056**: the service worker uses **network first** (not cache first): online users and
+  developers always get the newest files; offline the cached copy is used.
+- **Extra**: `index.html` shows a hint when opened from `file://`; on phones (≤ 520 px) the
+  zoom buttons are hidden because pinch replaces them.
+- **T060**: no screenshot in the README yet (needs a browser run).
 
 ## Notes
 
