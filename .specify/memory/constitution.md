@@ -1,50 +1,103 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# ALFinity Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Plain Web Stack
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+- ALFinity MUST be built with plain HTML, vanilla JavaScript (ES modules allowed) and CSS.
+- No framework, library, build tool or package manager dependency MAY be added without the
+  project owner's explicit approval.
+- Every proposed dependency MUST come with a written explanation: what it does, why plain
+  code is insufficient, its size/maintenance cost, and the alternative without it.
+- Browser-native APIs (Canvas, Web Workers, OffscreenCanvas, WebGL, localStorage,
+  IndexedDB) are part of the platform and are not considered dependencies.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+**Rationale**: The code must stay readable and maintainable by one person, run without a
+build step, and avoid dependency churn.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### II. Responsive on Every Screen
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+- The app MUST be usable and visually polished on iPhone, iPad, and desktop Chrome on a
+  MacBook and on a 4K external monitor.
+- Layouts MUST adapt from small portrait phones to large landscape displays without
+  horizontal scrolling or clipped controls.
+- Input MUST work with touch (tap, pinch-zoom, drag) and with mouse/trackpad (click,
+  wheel, drag).
+- Rendered images MUST honor `devicePixelRatio` so fractals look sharp on Retina and 4K
+  displays.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+**Rationale**: The owner uses all these devices; a fractal explorer that looks blurry or
+cramped on any of them fails its purpose.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### III. Approachable for Non-Mathematicians
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+- Every setting MUST have a plain-language label and a sensible default; the app MUST
+  produce an attractive image on first load with zero configuration.
+- Controls MUST favor direct manipulation (sliders, color pickers, presets, click-to-zoom)
+  over typing numbers.
+- Mathematical parameters (e.g. complex constants, iteration counts, escape radius) MAY be
+  exposed, but MUST be optional, explained in one sentence, and hideable.
+- Any change a user makes MUST be undoable or easily reset to defaults.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+**Rationale**: The target user wants beautiful pictures, not a math lesson.
+
+### IV. Performance-Conscious Rendering
+
+- Rendering MUST NOT freeze the user interface; long computations MUST run off the main
+  thread or in yielding chunks.
+- The app MUST give fast visual feedback (e.g. a low-resolution preview first, then
+  refinement).
+- When a meaningful speed-up exists (Web Workers, progressive rendering, WebGL shaders,
+  OffscreenCanvas, caching), it MUST be proposed to the owner with its trade-offs before
+  adoption, and it MUST respect Principle I.
+
+**Rationale**: Exploring fractals means constant re-rendering; sluggishness kills
+exploration.
+
+### V. Explore and Keep
+
+- Users MUST be able to experiment freely with fractal type, position, zoom and colors.
+- Users MUST be able to save a complete setting (fractal, view and coloring) under a name,
+  and later reload, rename or delete it.
+- Saved settings MUST persist in the browser across sessions and SHOULD be exportable and
+  importable as a file so they can move between devices.
+
+**Rationale**: Finding a beautiful view takes effort; it must never be lost.
+
+### VI. Simplicity (YAGNI)
+
+- Build only what a current specification requires; no speculative features or
+  abstractions.
+- Prefer a small number of clear files over deep module hierarchies.
+- Any added complexity MUST be justified in the plan's Complexity Tracking section.
+
+**Rationale**: A small, simple codebase is easier to understand, change and keep fast.
+
+## Technical Constraints
+
+- The app MUST run as static files opened from a simple local or static web server; no
+  backend is required.
+- Target browsers: current Safari on iOS/iPadOS, current Safari and Chrome on macOS.
+- No user data leaves the device; storage is local to the browser.
+- The app SHOULD work offline once loaded.
+
+## Development Workflow
+
+- Features follow the Spec Kit flow: specify → (clarify) → plan → tasks → implement.
+- Each plan MUST include a Constitution Check against Principles I–VI.
+- Each feature MUST be verified manually on a phone-sized viewport, a tablet-sized viewport
+  and a large desktop viewport before it is considered done.
+- Pure computation logic (fractal math, color mapping, settings serialization) SHOULD have
+  lightweight tests runnable in the browser or with Node, without adding dependencies.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+- This constitution supersedes other practices for ALFinity. Plans and reviews MUST verify
+  compliance; deviations MUST be documented and approved by the project owner.
+- Amendments are made via `/speckit-constitution`, recorded with a version bump:
+  MAJOR for removing or redefining a principle, MINOR for adding or materially expanding
+  one, PATCH for wording clarifications.
+- The project owner is the final authority on dependency approvals (Principle I) and
+  performance trade-offs (Principle IV).
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2026-10-17 | **Last Amended**: 2026-10-17
