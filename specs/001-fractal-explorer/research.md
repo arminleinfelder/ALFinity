@@ -9,7 +9,7 @@ Every decision below uses only browser-native APIs; no third-party libraries are
 
 - **Decision**: Hybrid. A **GPU engine** (WebGL2 fragment shader) renders shallow and medium
   zoom levels; a **CPU engine** (pool of Web Workers, 64-bit numbers) takes over
-  automatically when GPU precision runs out, up to the ~10-trillion× limit (FR-012).
+  automatically when GPU precision runs out, up to the precision limit of ~10¹²–10¹³× (FR-012).
 - **Rationale**: The owner chose the best experience: near-instant pictures for most
   exploration, and correct pictures at deep zoom. GPU `highp float` is 32-bit (about
   7 significant digits), so pixels become blocky beyond ~10⁵× zoom; JavaScript numbers are

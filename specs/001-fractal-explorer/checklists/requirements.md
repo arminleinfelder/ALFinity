@@ -31,5 +31,5 @@
 
 ## Notes
 
-- Clarified 2026-10-17: FR-008 → Mandelbrot and Julia only; FR-012 → ~10 trillion× zoom limit.
+- Clarified 2026-10-17: FR-008 → Mandelbrot and Julia only; FR-012 → zoom up to the standard precision limit (~1–10 trillion×, depends on screen size).
 - Items marked incomplete require spec updates before `/speckit-clarify` or `/speckit-plan`

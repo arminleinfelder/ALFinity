@@ -190,8 +190,9 @@ both show the same view and colors, the 4K one with more detail.
   zoom depth, plus a simple manual slider.
 - **FR-011**: All mathematical parameters MUST be optional, shown in a collapsible
   "Details" area with one-sentence plain-language explanations.
-- **FR-012**: Zooming MUST work cleanly up to roughly 10 trillion times (the limit of
-  standard number precision); beyond that the app MUST stop zooming and show a friendly
+- **FR-012**: Zooming MUST work cleanly up to the limit of standard number precision,
+  about 1–10 trillion times depending on screen size (more pixels across means a lower
+  limit); beyond that the app MUST stop zooming and show a friendly
   "Maximum zoom reached" message. Unlimited deep zoom is out of scope.
 
 **Coloring**
