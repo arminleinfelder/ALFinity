@@ -1,0 +1,16 @@
+# macOS
+.DS_Store
+
+# Editors
+.vscode/
+.idea/
+
+# Claude Code local settings
+.claude/settings.local.json
+
+# Spec Kit extension catalog cache
+.specify/extensions/.cache/
+
+# Environment / secrets
+.env
+.env.*
