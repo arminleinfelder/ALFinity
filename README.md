@@ -102,7 +102,7 @@ The specification, plan and task list are in [specs/001-fractal-explorer](specs/
 
 ## Learning project
 
-ALFinity is a personal, non-commercial learning project documenting my journey into spec-driven development (SSD) and AI-assisted vibe coding.
+ALFinity is a personal, non-commercial learning project documenting my journey into spec-driven development (SDD) and AI-assisted vibe coding.
 This application is provided for educational and experimental purposes only. No commercial services are offered.
 
-It is quite impressive to see, how qucikly such an app can be implemented: With help of GitHub SpecKit and Claude Code model Opus 5.5 it took less than 8 hours to specify, build, test and deploy the initial version of this app.
+It is quite impressive to see how quickly such an app can be implemented: With help of GitHub SpecKit and Claude Code model Opus 5.5 it took less than 8 hours to specify, build, test and deploy the initial version of this app.
