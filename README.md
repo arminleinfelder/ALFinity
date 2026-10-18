@@ -1,6 +1,6 @@
 # ALFinity
 
-![The Mandelbrot set in golden colors, drawn with ALFinity](docs/mandelbrot.jpg)
+![The Mandelbrot set in golden colors, drawn with ALFinity](docs/banner.jpg)
 
 ALFinity is a fractal explorer for the browser. Zoom into the Mandelbrot set, discover Julia
 sets, play with colors and keep your favorite pictures, with no math knowledge needed. It
