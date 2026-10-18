@@ -81,9 +81,11 @@ function start() {
   // ---- Start picture: share link, else the last view, else the default (FR-021, FR-022) ----
 
   let initial = DEFAULT_SETTING;
+  let fromLink = false;
   if (location.hash.startsWith("#s=")) {
     const link = decodeShareLink(location.hash, knownPaletteIds());
     if (link) {
+      fromLink = true;
       initial = link.setting;
       if (link.palette) {
         initial = { ...initial, color: { ...initial.color, paletteId: adoptSharedPalette(link.palette) } };
@@ -97,6 +99,8 @@ function start() {
   }
 
   const state = new State(initial);
+  // The link is removed from the address bar, so remember the shared picture for a reload.
+  if (fromLink) saveLast(state.get());
   let favorites = loadFavorites(knownPaletteIds());
   let W = 0;
   let H = 0;
