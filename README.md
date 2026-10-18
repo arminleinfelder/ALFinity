@@ -99,3 +99,7 @@ Real iPhones and iPads (Safari) still need a manual check with
 ## Project documents
 
 The specification, plan and task list are in [specs/001-fractal-explorer](specs/001-fractal-explorer/).
+
+## Learning Project
+
+This app is my "hello world" learning project to become familiar with spec-driven design (SDD) based on GitHub Spec-Kit and Claude Code. It took me approx. 8 hours to specify, build, test and deploy the first version together with help of CLaude Code.
