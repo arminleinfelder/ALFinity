@@ -19,3 +19,6 @@
 *.log
 *.swp
 Thumbs.db
+
+# Browser test output (screenshots, downloads)
+tests/browser/output/

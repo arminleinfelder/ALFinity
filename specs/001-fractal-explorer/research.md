@@ -165,3 +165,44 @@ the home screen are exempt. Three small measures, all browser-native:
 
 - **Decision**: `python3 -m http.server 8000` (preinstalled on macOS). Module workers and
   service workers do not run from `file://` URLs, so a simple server is required.
+
+## R13. Cycle detection for deep zoom (tried 2026-10-18, not adopted)
+
+- **Tried**: Brent-style cycle detection in the CPU iteration with *exact* comparison (an orbit
+  that repeats a value exactly can never escape, so results stay bit-identical) and with small
+  tolerances.
+- **Measured** (single thread, 480×300 points, seahorse-valley point):
+
+  | View | Inside points | Plain | With exact cycle detection |
+  |---|---|---|---|
+  | 10⁶× | 41 % | 1061 ms | 1059 ms |
+  | 10⁷× | 71 % | 2369 ms | 2876 ms |
+  | 10⁸× | 0 % | 669 ms | 807 ms |
+  | 10¹²× | 0 % | 1019 ms | 1235 ms |
+
+- **Why it does not help**: the inside points of these views belong to a cycle of length 78
+  with a weak pull (multiplier 0.70–0.94). Their orbits approach the cycle so slowly
+  (2,600–15,000 iterations to get within 10⁻¹²) that they almost never repeat within the
+  iteration limit; even generous tolerances detected under 5 % at 10⁷×. The extra comparison
+  costs about 20 % on all other points.
+- **Kept**: a test that the CPU iteration matches a plain reference bit for bit
+  (`tests/fractal.test.js`), which any future speed-up must pass.
+- **Options for later** (each needs the owner's approval): use all CPU cores instead of all
+  but one (identical pictures, up to +33 % on 4 cores); fill rectangles whose border is entirely
+  inside the set (large gains in views with big black areas, tiny risk of missing thin
+  filaments); extended-precision arithmetic on the graphics card (fastest for deep views, but a
+  larger change that must be verified on Apple GPUs).
+
+## R14. Automated browser tests
+
+- **Decision**: `tests/browser/run.mjs` drives a separate Chrome (empty temporary profile,
+  headless by default) through the Chrome DevTools Protocol, using only Node built-ins
+  (`fetch`, `WebSocket`, `child_process`), and serves the app with its own
+  `python3 -m http.server` on a free port.
+- **Rationale**: the Claude in Chrome extension cannot open local addresses, and tests must
+  not touch the owner's normal browser. The DevTools Protocol gives device emulation (sizes,
+  pixel ratio, touch, user agent), real input events, screenshots and console messages, with
+  no packages (Principle I). Files the app offers for download are captured inside the page,
+  because Chrome blocks repeated automatic downloads when nobody can answer its prompt.
+- **Alternatives considered**: Playwright or Puppeteer (npm packages; not needed for this
+  scope); only manual testing (slow to repeat, misses regressions such as the blank-export bug).

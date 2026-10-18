@@ -118,7 +118,12 @@ tests/
 ├── view.test.js
 ├── fractal.test.js
 ├── palette.test.js
-└── settings.test.js
+├── settings.test.js
+├── engines.consistency.md # manual GPU/CPU comparison guide
+└── browser/               # automated browser tests (added 2026-10-18, research.md R14)
+    ├── run.mjs            # runner: own server + temporary headless Chrome
+    ├── lib/               # chrome.mjs, server.mjs, page.mjs (DevTools Protocol helpers)
+    └── suites/            # load, explore, panels, touch, rendering, offline, perf
 ```
 
 **Structure Decision**: A single static project at the repository root, served as-is. Pure

@@ -297,7 +297,11 @@ Task: "Implement PURE js/settings.js validation (T036)"
   thumbnails blank (`js/render/gpu.js`); stale cached files after updates (`sw.js` now
   revalidates, cache `alfinity-v2`); status messages covered by the bottom sheet on phones
   (`css/app.css`); `GPU_PRECISION` tuned from 2⁻²⁰ to 2⁻²² (research.md R3).
-- **T058**: measured; SC-002 is missed for deep views (≥ 10⁶). Speed-ups await the owner's decision.
+- **T058**: measured; SC-002 is missed for deep views (≥ 10⁶). Cycle detection was approved,
+  tried and not adopted because it does not help these views ([research.md](research.md) R13).
+- **Automated browser tests** (approved 2026-10-18): `node tests/browser/run.mjs`, 98 checks
+  ([research.md](research.md) R14). The first run found one more bug, now fixed: a picture
+  opened from a share link was lost on reload (`js/main.js` now stores it right away).
 - **T059** stays open: real iPhone/iPad Safari testing after publishing to GitHub Pages.
 
 ## Notes

@@ -30,6 +30,16 @@ node --test "tests/*.test.js"
 Expected: all tests pass (fractal math, view mapping, palettes, settings, file/link
 encoding).
 
+## Run the browser tests
+
+```bash
+node tests/browser/run.mjs          # ≈ 3 minutes, add --perf for the speed table
+```
+
+Expected: "98 of 98 checks passed" and exit code 0. The runner covers most scenarios below
+automatically in Chrome at desktop, 4K, iPad and iPhone sizes (emulated touch); screenshots
+are in `tests/browser/output/screens/`. Real iPhones and iPads still need the manual run.
+
 ## Validation scenarios
 
 Each scenario maps to a user story in [spec.md](spec.md). Run on phone, tablet and 4K
@@ -109,9 +119,10 @@ detailed point −0.743643887037151 + 0.13182590420533i. During gestures at CPU 
 picture follows the finger immediately (CSS transform); the 1/4-resolution preview arrived
 0.4–1.7 s after page start.
 
-**Finding**: deep views (≥ 10⁶) miss SC-002. Most time goes to points inside the set, which run
-through all 4,500–7,900 iterations. Cycle detection ("periodicity checking") in the CPU worker
-would end those points early; it was proposed earlier and deferred by the owner.
+**Finding**: deep views (≥ 10⁶) miss SC-002. In views with large black areas most time goes to
+points inside the set, which run through all 4,500–7,900 iterations; in views without inside
+points (10⁸, 10¹²) the points escape only after thousands of iterations. Cycle detection was
+approved and tried on 2026-10-18 but does not help here (see [research.md](research.md) R13).
 
 Other results of the automated run: all panel, touch, export, share-link, persistence and
 offline checks passed after fixing two bugs (blank CPU tiles in exports and deep thumbnails —

@@ -65,9 +65,25 @@ The math, view, palette and settings logic has tests that use Node's built-in te
 node --test "tests/*.test.js"
 ```
 
-Rendering and the interface are checked by hand with
-[quickstart.md](specs/001-fractal-explorer/quickstart.md) and
-[tests/engines.consistency.md](tests/engines.consistency.md).
+### Browser tests
+
+The whole app (rendering, gestures, panels, favorites, exports, offline mode) is tested
+automatically in Chrome at desktop, 4K, iPad and iPhone sizes:
+
+```bash
+node tests/browser/run.mjs            # all functional checks, about 3 minutes
+node tests/browser/run.mjs --headed   # watch it in a visible Chrome window
+node tests/browser/run.mjs --perf     # also measure speed against the success criteria
+node tests/browser/run.mjs --only=touch,panels
+```
+
+The runner starts its own web server on a free port and a separate Chrome with an empty,
+temporary profile, so your normal browser and its data are never used. It needs Google
+Chrome, Python 3 and Node (no packages). Screenshots and downloaded files end up in
+`tests/browser/output/`. Set `CHROME_PATH` if Chrome is installed somewhere else.
+
+Real iPhones and iPads (Safari) still need a manual check with
+[quickstart.md](specs/001-fractal-explorer/quickstart.md).
 
 ## Developer notes
 
