@@ -176,6 +176,14 @@ html, body {
   border-radius: var(--radius) var(--radius) 0 0;
 }
 
+/* Phones: while a bottom sheet is open, show messages near the top so they do not cover it. */
+@media (max-width: 767px) {
+  body:has(#panel:not([hidden])) #status {
+    top: calc(env(safe-area-inset-top) + 4.25rem);
+    bottom: auto;
+  }
+}
+
 @media (min-width: 768px) {
   #panel {
     left: auto;

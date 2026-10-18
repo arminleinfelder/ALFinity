@@ -110,6 +110,9 @@ export class GpuEngine {
       this.fbo = gl.createFramebuffer();
       this.fboTex = gl.createTexture();
     }
+    // Texture unit 2 is used by no shader: binding the render target on unit 0 or 1 would
+    // replace the palette or the CPU values and form a feedback loop (read and write the same texture).
+    gl.activeTexture(gl.TEXTURE2);
     gl.bindTexture(gl.TEXTURE_2D, this.fboTex);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
@@ -174,6 +177,7 @@ export class GpuEngine {
   drawNu(nu, gw, gh, step, W, H, { offscreen = false } = {}) {
     const gl = this.gl;
     if (gl.isContextLost()) return;
+    this.#begin(W, H, offscreen); // first: setting up the offscreen buffer changes texture bindings
     gl.activeTexture(gl.TEXTURE1);
     gl.bindTexture(gl.TEXTURE_2D, this.nuTex);
     if (this.nuData !== nu) {
@@ -181,7 +185,6 @@ export class GpuEngine {
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.R32F, gw, gh, 0, gl.RED, gl.FLOAT, nu);
       this.nuData = nu;
     }
-    this.#begin(W, H, offscreen);
 
     const prog = this.nu;
     gl.useProgram(prog.program);

@@ -36,12 +36,15 @@ Every decision below uses only browser-native APIs; no third-party libraries are
 
 ## R3. When to switch from GPU to CPU
 
-- **Decision**: Use the GPU while `pixelSize ≥ max(|cx|, |cy|, 1) × 2⁻²⁰` (`pixelSize` =
+- **Decision**: Use the GPU while `pixelSize ≥ max(|cx|, |cy|, 1) × 2⁻²²` (`pixelSize` =
   complex-plane width of one screen pixel, `cx, cy` = view center); otherwise use the CPU.
-  The threshold is one constant, tuned during implementation by comparing both engines on
-  test views.
-- **Rationale**: 32-bit floats have 24 bits of mantissa; leaving ~4 bits of headroom avoids
-  visible banding before the switch.
+  The threshold is one constant (`GPU_PRECISION` in `js/view.js`).
+- **Rationale**: 32-bit floats have 24 bits of mantissa; 2 bits of headroom avoid visible
+  blockiness before the switch.
+- **Tuning (2026-10-18)**: first set to 2⁻²⁰. Full-resolution GPU/CPU comparisons in Chrome
+  (Metal) showed identical pictures down to 2⁻²³ and blocky ones at 2⁻²⁴, so the threshold
+  became 2⁻²² (one step of margin). The GPU now covers about 4× deeper views: up to ≈ 7,500×
+  on a 1440×900@2x screen, ≈ 6,200× on 4K and ≈ 11,000× on an iPhone, where it was ≈ 1,900×.
 - **Alternatives considered**: A fixed zoom number (wrong when the center is far from 0).
 - **Maximum zoom (FR-012)**: the same rule with 64-bit numbers. Zooming stops when
   `pixelSize < max(|cx|, |cy|, 1) × 2⁻⁵⁰`. In practice this is about 10¹²× on a 4K screen

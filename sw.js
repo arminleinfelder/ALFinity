@@ -2,8 +2,10 @@
 //
 // Network first: when online, the newest files are always used (and the copy updated);
 // when offline, the copy is used. Bump CACHE when the file list changes.
+// "no-cache" makes the browser check each file with the server (a cheap "not modified" reply
+// when unchanged), so after an update old and new files are never mixed.
 
-const CACHE = "alfinity-v1";
+const CACHE = "alfinity-v2";
 const FILES = [
   "./",
   "index.html",
@@ -55,7 +57,7 @@ self.addEventListener("fetch", (event) => {
   const { request } = event;
   if (request.method !== "GET" || new URL(request.url).origin !== location.origin) return;
   event.respondWith(
-    fetch(request)
+    fetch(request, { cache: "no-cache" })
       .then((response) => {
         if (response.ok) {
           const copy = response.clone();

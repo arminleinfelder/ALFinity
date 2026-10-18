@@ -86,3 +86,33 @@ desktop.
 ### Offline
 
 1. Load once, turn off Wi-Fi, reload → app still works.
+
+## Measured results (T058, 2026-10-18)
+
+Automated in a separate headless Chrome 155 (Metal GPU) controlled through the DevTools
+Protocol, on a 4-core macOS virtual machine; iPhone and iPad sizes are emulated (screen size,
+pixel ratio, touch, user agent). Real Apple devices are usually faster, especially the CPU.
+
+| Criterion | Desktop 2880×1800 | iPhone 1170×2532 | 4K 3840×2160 | Target |
+|---|---|---|---|---|
+| SC-001 first picture after page start | 0.30 s | 0.43 s | 0.41 s | < 2 s ✔ |
+| Gestures on the GPU (frame time) | 16.7 ms, max 17 ms | 16.7 ms, max 17 ms | 16.7 ms, max 17 ms | 60 fps ✔ |
+| SC-003 recolor (GPU / CPU view) | 34 / 28 ms | 83 / 78 ms | 33 / 29 ms | < 0.1 s ✔ |
+| SC-007 main thread blocked > 0.1 s | never | never | never | never ✔ |
+| SC-002 full picture, zoom 10⁴ | 1.5 s (CPU) | 0.35 s (GPU) | 2.1 s (CPU) | < 2 s ✔ / 4K ✖ |
+| SC-002 full picture, zoom 10⁵ | 1.7 s | 1.1 s | 2.4 s | < 2 s ✔ / 4K ✖ |
+| SC-002 full picture, zoom 10⁶ | 14.8 s | 5.6 s | 21.9 s | < 2 s ✖ |
+| SC-002 full picture, zoom 10⁸ | 9.7 s | 8.3 s | 15.5 s | < 2 s ✖ |
+
+Times for zoomed views are measured from page start (including ≈ 0.3 s page load) at the
+detailed point −0.743643887037151 + 0.13182590420533i. During gestures at CPU depth the last
+picture follows the finger immediately (CSS transform); the 1/4-resolution preview arrived
+0.4–1.7 s after page start.
+
+**Finding**: deep views (≥ 10⁶) miss SC-002. Most time goes to points inside the set, which run
+through all 4,500–7,900 iterations. Cycle detection ("periodicity checking") in the CPU worker
+would end those points early; it was proposed earlier and deferred by the owner.
+
+Other results of the automated run: all panel, touch, export, share-link, persistence and
+offline checks passed after fixing two bugs (blank CPU tiles in exports and deep thumbnails —
+a WebGL feedback loop; stale files after updates — the service worker now revalidates).

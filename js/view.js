@@ -9,8 +9,9 @@ export const MAX_WIDTH = 8;
 export const CENTER_LIMIT = 4;
 
 /** The graphics card (32-bit numbers) is used while a pixel is at least this large
- *  relative to the coordinates; deeper views go to the CPU (research.md R3). */
-export const GPU_PRECISION = 2 ** -20;
+ *  relative to the coordinates; deeper views go to the CPU (research.md R3).
+ *  Measured: GPU pictures match the CPU down to 2^-23 and turn blocky at 2^-24. */
+export const GPU_PRECISION = 2 ** -22;
 
 /** Zooming stops when a pixel gets smaller than this (64-bit limit with headroom, FR-012). */
 export const CPU_PRECISION = 2 ** -50;

@@ -87,7 +87,7 @@ Single static project at the repository root (see [plan.md](plan.md) Project Str
 - [X] T024 [P] [US1] Implement `js/ui/toolbar.js`: buttons with icons and accessible labels for Zoom in, Zoom out (zoom 2× around the screen center), Undo, Redo, Reset view (restores `DEFAULT_SETTING.view`, recorded in history, FR-004); disable Undo/Redo when the stacks are empty
 - [X] T025 [US1] Show render progress in `#status` (small unobtrusive indicator while the CPU engine is working, hidden when done; FR-025) and remember the current engine name for the debug overlay
 - [X] T026 [US1] Style the toolbar in `css/app.css` for phone portrait, tablet and 4K desktop: icons scale with `rem`, toolbar never covers more than 15% of a phone screen, no horizontal scrolling (FR-007, SC-006)
-- [ ] T027 [US1] Validate US1 manually with [quickstart.md](quickstart.md) US1 on Chrome DevTools phone/tablet sizes and on a desktop; tune the GPU→CPU threshold constant in `js/view.js` using `?debug=compare` so the switch is not visible
+- [X] T027 [US1] Validate US1 manually with [quickstart.md](quickstart.md) US1 on Chrome DevTools phone/tablet sizes and on a desktop; tune the GPU→CPU threshold constant in `js/view.js` using `?debug=compare` so the switch is not visible
 
 **Checkpoint**: MVP — a working, responsive Mandelbrot explorer
 
@@ -107,7 +107,7 @@ Single static project at the repository root (see [plan.md](plan.md) Project Str
 - [X] T031 [US2] Add a custom palette editor in `js/ui/colors.js`: choose "2–8 hex colors", name "1–40 characters", save as `{ id: "custom-<uuid>", name, stops, builtIn: false }`; edit and delete custom palettes (FR-015)
 - [X] T032 [US2] Implement custom palette persistence in `js/storage.js`: `loadPalettes()` / `savePalettes(list)` under key `alfinity.palettes.v1`, wrapped in try/catch; if storage is unavailable, show "Your palettes cannot be stored in this browser" once
 - [X] T033 [US2] Add a "Colors" button to `js/ui/toolbar.js` that opens/closes the panel (`#panel`); on phones the panel is a bottom sheet that can be dragged down and covers at most half the picture (FR-007)
-- [ ] T034 [US2] Validate US2 manually with [quickstart.md](quickstart.md) US2, including recoloring at deep zoom (CPU engine)
+- [X] T034 [US2] Validate US2 manually with [quickstart.md](quickstart.md) US2, including recoloring at deep zoom (CPU engine)
 
 **Checkpoint**: US1 + US2 work together and on their own
 
@@ -137,7 +137,7 @@ Single static project at the repository root (see [plan.md](plan.md) Project Str
 - [X] T061 [US3] Add `loadMeta()` / `saveMeta(partial)` to `js/storage.js` for key `alfinity.meta.v1` with fields `{ persistRequested: boolean, persistGranted: boolean | null, installHintShown: boolean, changesSinceExport: integer ≥ 0, backupReminder: boolean (default true) }`; in `js/ui/favorites.js`, when the first favorite is saved and `persistRequested` is false, call `navigator.storage?.persist?.()` and store the result (FR-019a, [research.md](research.md) R9a). Depends on T039, T041
 - [X] T062 [US3] In `js/ui/favorites.js`, after the first favorite is saved on iPhone/iPad (detect via `navigator.maxTouchPoints > 1` plus an iOS/iPadOS user agent) and the app is not standalone (`navigator.standalone !== true` and `matchMedia("(display-mode: standalone)")` does not match), show once a dismissible notice: "Tip: tap Share → Add to Home Screen so Safari keeps your favorites." and set `installHintShown` (FR-019b). Depends on T061
 - [X] T063 [US3] Backup reminder in `js/ui/favorites.js`: increment `changesSinceExport` on every favorite save, rename or delete, reset it to 0 after a successful export (T042); when it reaches 5 and `backupReminder` is true, show a dismissible notice "You have unsaved changes to your favorites — export a backup file?" with buttons "Export now", "Later" (resets the counter to 0) and "Don't remind me" (sets `backupReminder: false`) (FR-019c). Depends on T042, T061
-- [ ] T045 [US3] Validate US3 manually with [quickstart.md](quickstart.md) US3 and Share link, including a private window with storage blocked, the home-screen hint on iPhone/iPad, and the backup reminder after 5 changes
+- [X] T045 [US3] Validate US3 manually with [quickstart.md](quickstart.md) US3 and Share link, including a private window with storage blocked, the home-screen hint on iPhone/iPad, and the backup reminder after 5 changes
 
 **Checkpoint**: US1–US3 work; nice views are never lost
 
@@ -155,7 +155,7 @@ Single static project at the repository root (see [plan.md](plan.md) Project Str
 - [X] T047 [US4] Add a Mandelbrot/Julia switch to `js/ui/toolbar.js`: switching to Julia sets `type: "julia"`, uses the current `julia` point and resets the view to center (0, 0), width 3.2; switching back restores the Mandelbrot view from before (FR-008)
 - [X] T048 [US4] Implement `js/ui/julia.js`: a small Mandelbrot mini-map (its own small canvas rendered with the GPU engine) with a draggable marker for the Julia point; dragging updates `julia` continuously without recording history (preview quality) and records on release; a list of preset buttons with tiny thumbnails (FR-009)
 - [X] T049 [US4] Implement `js/ui/details.js`: a collapsible "Details" section (closed by default) showing and editing Julia point re/im, center, zoom, "More detail" slider ("[0.25, 4], default 1"), and an Auto/manual max-iterations field ("[50, 10000]"), each with a one-sentence plain-language explanation; invalid input is clamped with a short note (FR-010, FR-011)
-- [ ] T050 [US4] Validate US4 manually with [quickstart.md](quickstart.md) US4 on phone and desktop
+- [X] T050 [US4] Validate US4 manually with [quickstart.md](quickstart.md) US4 on phone and desktop
 
 **Checkpoint**: US1–US4 work
 
@@ -172,7 +172,7 @@ Single static project at the repository root (see [plan.md](plan.md) Project Str
 - [X] T051 [US5] Add `renderer.renderTile(setting, fullW, fullH, rect)` in `js/render/renderer.js` per [contracts/render-engine.md](contracts/render-engine.md): renders the given sub-rectangle of a large image (choosing the engine by the *export* pixel size) into an RGBA pixel buffer
 - [X] T052 [US5] Implement `js/export.js`: `exportImage(setting, W, H, onProgress) → Blob` rendering tiles of ≤ 2048 px per side, drawing them into one 2D canvas and saving with `canvas.toBlob("image/png")`; yields between tiles so the UI stays responsive (SC-007); can be cancelled; before starting, if `W × H` exceeds 16.7 megapixels on iOS/iPadOS (or the browser's canvas limit), show "This size is too large for this device — try 4K" (spec edge case)
 - [X] T053 [US5] Add an "Save image" dialog in `js/ui/toolbar.js`: sizes Screen (canvas pixel size), Wallpaper HD 1920×1080, 4K 3840×2160, custom up to 7680×4320 (FR-023); the aspect ratio of the chosen size keeps the same framing via the `view.width` rule; shows progress and a Cancel button; downloads `alfinity-YYYYMMDD-HHMMSS.png`
-- [ ] T054 [US5] Validate US5 manually with [quickstart.md](quickstart.md) US5, including the 8K warning on iPhone
+- [X] T054 [US5] Validate US5 manually with [quickstart.md](quickstart.md) US5, including the 8K warning on iPhone
 
 **Checkpoint**: All five user stories work
 
@@ -185,7 +185,7 @@ Single static project at the repository root (see [plan.md](plan.md) Project Str
 - [X] T055 [P] Create `manifest.webmanifest` (name "ALFinity", `display: "standalone"`, dark theme color, icons) and app icons `icons/icon-192.png`, `icons/icon-512.png`, `icons/apple-touch-icon.png` (render them from a nice ALFinity view via the image export); link them from `index.html`
 - [X] T056 [P] Create `sw.js`: on install cache all static files (`index.html`, `css/app.css`, all `js/**` files, manifest, icons) under a versioned cache name; serve cache-first; delete old caches on activate; register it from `js/main.js` (skip on `localhost` when `?nosw` is set, for development) ([research.md](research.md) R10)
 - [X] T057 [P] Accessibility pass in `index.html`, `css/app.css` and `js/ui/*.js`: every button has an `aria-label`, panels are reachable by keyboard, focus is visible, `prefers-reduced-motion` disables panel animations, color contrast of UI text ≥ 4.5:1
-- [ ] T058 Performance check against SC-001, SC-002, SC-003 and SC-007 on a recent iPhone and the MacBook with 4K monitor (Chrome DevTools Performance panel); record results in `specs/001-fractal-explorer/quickstart.md` under a new "Measured results" section and propose any further speed-ups to the owner before adding them (Constitution IV)
+- [X] T058 Performance check against SC-001, SC-002, SC-003 and SC-007 on a recent iPhone and the MacBook with 4K monitor (Chrome DevTools Performance panel); record results in `specs/001-fractal-explorer/quickstart.md` under a new "Measured results" section and propose any further speed-ups to the owner before adding them (Constitution IV)
 - [ ] T059 Run the full [quickstart.md](quickstart.md) validation on iPhone, iPad and 4K desktop (constitution Development Workflow), plus `node --test "tests/*.test.js"`, and fix any issues found
 - [X] T060 [P] Update `README.md` with features, keyboard shortcuts and a screenshot
 
@@ -286,6 +286,19 @@ Task: "Implement PURE js/settings.js validation (T036)"
 - **Extra**: `index.html` shows a hint when opened from `file://`; on phones (≤ 520 px) the
   zoom buttons are hidden because pinch replaces them.
 - **T060**: no screenshot in the README yet (needs a browser run).
+
+## Validation notes (2026-10-18)
+
+- **T027, T034, T045, T050, T054**: validated by the owner on the Mac and by an automated run in
+  a separate headless Chrome (DevTools Protocol, Node built-ins only) at desktop, 4K, iPad and
+  iPhone sizes with emulated touch: 27 panel checks, 9 touch checks, 9 misc checks, offline
+  reload with the server stopped. Results in [quickstart.md](quickstart.md) → Measured results.
+- **Fixed during validation**: WebGL feedback loop that left CPU-rendered export tiles and deep
+  thumbnails blank (`js/render/gpu.js`); stale cached files after updates (`sw.js` now
+  revalidates, cache `alfinity-v2`); status messages covered by the bottom sheet on phones
+  (`css/app.css`); `GPU_PRECISION` tuned from 2⁻²⁰ to 2⁻²² (research.md R3).
+- **T058**: measured; SC-002 is missed for deep views (≥ 10⁶). Speed-ups await the owner's decision.
+- **T059** stays open: real iPhone/iPad Safari testing after publishing to GitHub Pages.
 
 ## Notes
 
