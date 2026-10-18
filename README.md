@@ -100,6 +100,9 @@ Real iPhones and iPads (Safari) still need a manual check with
 
 The specification, plan and task list are in [specs/001-fractal-explorer](specs/001-fractal-explorer/).
 
-## Learning Project
+## Learning project
 
-This app is my "hello world" learning project to become familiar with spec-driven design (SDD) based on GitHub Spec-Kit and Claude Code. It took me approx. 8 hours to specify, build, test and deploy the first version together with help of Claude Code.
+ALFinity is a personal, non-commercial learning project documenting my journey into spec-driven development (SSD) and AI-assisted vibe coding.
+This application is provided for educational and experimental purposes only. No commercial services are offered.
+
+It is quite impressive to see, how qucikly such an app can be implemented: With help of GitHub SpecKit and Claude Code model Opus 5.5 it took less than 8 hours to specify, build, test and deploy the initial version of this app.
