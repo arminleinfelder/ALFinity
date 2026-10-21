@@ -36,7 +36,7 @@ encoding).
 node tests/browser/run.mjs          # ≈ 3 minutes, add --perf for the speed table
 ```
 
-Expected: "98 of 98 checks passed" and exit code 0. The runner covers most scenarios below
+Expected: "103 of 103 checks passed" and exit code 0. The runner covers most scenarios below
 automatically in Chrome at desktop, 4K, iPad and iPhone sizes (emulated touch); screenshots
 are in `tests/browser/output/screens/`. Real iPhones and iPads still need the manual run.
 

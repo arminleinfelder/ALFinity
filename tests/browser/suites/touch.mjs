@@ -35,6 +35,12 @@ export async function run(t) {
     check("a single tap does not zoom", zoom(s2) === zoom(s));
 
     if (device === "iphone") {
+      const brand = await page.eval(`(() => { const r = document.querySelector(".brand").getBoundingClientRect();
+        return { visible: r.width > 0, center: r.left + r.width / 2, bottom: r.bottom }; })()`);
+      check("the name ALFinity is shown at the bottom center",
+        brand.visible && Math.abs(brand.center - W / 2) < 2 && brand.bottom > H - 60 && brand.bottom <= H);
+      await page.shot(`touch-${device}-start`);
+
       await page.click('[data-action="colors"]');
       await wait(400);
       const sheet = await page.eval(`(() => { const r = document.getElementById("panel").getBoundingClientRect();

@@ -174,6 +174,24 @@ async function runOn(t, device) {
     st.height === 1080 && st.transparent === 0 && st.spread > 10, png?.name);
   await page.escape();
 
+  // ---- About ----
+  await page.click('[data-action="about"]');
+  await wait(200);
+  const about = await page.eval(`(() => {
+    const panel = document.getElementById("panel");
+    const link = panel.querySelector('a[href^="https://github.com/arminleinfelder/ALFinity"]');
+    const wiki = [...panel.querySelectorAll('a[href^="https://en.wikipedia.org/wiki/"]')].map((a) => a.textContent + " " + a.href);
+    return { open: !panel.hidden, text: panel.textContent.replace(/\\s+/g, " "), wiki, link: link?.target === "_blank",
+             version: /^\\d+\\.\\d+\\.\\d+ · \\d{4}-\\d{2}-\\d{2}$/.test(panel.querySelector("[data-version]")?.textContent ?? "") };
+  })()`);
+  check("About panel: purpose, author, repo link, version and date", about.open && about.link && about.version &&
+    /Mandelbrot and Julia/.test(about.text) && /Armin Leinfelder/.test(about.text));
+  check("About panel: Mandelbrot and Julia link to Wikipedia",
+    about.wiki.join() === "Mandelbrot https://en.wikipedia.org/wiki/Mandelbrot_set,Julia https://en.wikipedia.org/wiki/Julia_set",
+    about.wiki.join());
+  await page.shot(`panels-${device}-about`);
+  await page.escape();
+
   t.noProblems(page);
   await page.close();
 }
