@@ -16,6 +16,7 @@ import { createColorsPanel } from "./ui/colors.js";
 import { createFavoritesPanel } from "./ui/favorites.js";
 import { createShapePanel } from "./ui/julia.js";
 import { createImagePanel } from "./ui/image.js";
+import { createAboutPanel } from "./ui/about.js";
 
 const START_VIEWS = { mandelbrot: DEFAULT_SETTING.view, julia: { cx: 0, cy: 0, width: 3.2 } };
 
@@ -304,6 +305,7 @@ function start() {
     colors: { title: "Colors", ui: colorsPanel },
     favorites: { title: "Favorites", ui: favoritesPanel },
     image: { title: "Save image", ui: imagePanel },
+    about: { title: "About ALFinity", ui: createAboutPanel() },
   };
   for (const [name, { title, ui }] of Object.entries(panels)) {
     actions[name] = () => panel.toggle(name, title, () => {

@@ -5,7 +5,7 @@
 // "no-cache" makes the browser check each file with the server (a cheap "not modified" reply
 // when unchanged), so after an update old and new files are never mixed.
 
-const CACHE = "alfinity-v2";
+const CACHE = "alfinity-v3";
 const FILES = [
   "./",
   "index.html",
@@ -29,6 +29,7 @@ const FILES = [
   "js/settings.js",
   "js/state.js",
   "js/storage.js",
+  "js/ui/about.js",
   "js/ui/colors.js",
   "js/ui/details.js",
   "js/ui/download.js",
@@ -38,6 +39,7 @@ const FILES = [
   "js/ui/panel.js",
   "js/ui/status.js",
   "js/ui/toolbar.js",
+  "js/version.js",
   "js/view.js",
 ];
 

@@ -227,6 +227,9 @@ html, body {
 
 .hint { margin: 0.2rem 0 0.75rem; font-size: 0.8rem; color: var(--muted); }
 
+.about p { margin: 0 0 0.5rem; line-height: 1.45; }
+.about a { color: var(--accent); }
+
 .btn {
   min-height: var(--tap);
   padding: 0 1rem;
@@ -509,10 +512,18 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; }
 
 /* ---- Responsive sizing ---- */
 
-/* Narrow screens: drop the name so all buttons fit in one row. */
+/* Narrow screens: the name moves to the bottom center so all buttons fit in one row at the
+   top; messages appear above it, and an open bottom sheet covers it. */
 @media (max-width: 640px) {
-  .brand { display: none; }
   #toolbar { justify-content: center; }
+  .brand {
+    position: fixed;
+    left: 50%;
+    bottom: calc(env(safe-area-inset-bottom) + var(--edge));
+    transform: translateX(-50%);
+    pointer-events: none; /* gestures pass through to the picture */
+  }
+  #status { bottom: calc(env(safe-area-inset-bottom) + var(--edge) + 3rem); }
 }
 /* Phones: pinch replaces the zoom buttons. */
 @media (max-width: 520px) {

@@ -13,6 +13,7 @@ const ICONS = {
   shape: icon('<path d="M12 12c0-1.7 1.3-3 3-3s3 1.3 3 3-1.3 3-3 3"/><path d="M15 15c-3.3 0-6-2.7-6-6s2.7-6 6-6"/><path d="M6 6.3A9 9 0 1 0 21 12"/>'),
   favorites: icon('<path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z"/>'),
   image: icon('<path d="M12 4v11M7 10l5 5 5-5"/><path d="M4 19h16"/>'),
+  about: icon('<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5v.01"/>'),
   colors: icon('<path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.6-1.6 0-.9-.7-1.3-.7-2.2 0-.9.7-1.6 1.6-1.6H17a4 4 0 0 0 4-4C21 6.6 17 3 12 3z"/><circle cx="7.5" cy="11" r="1.2"/><circle cx="10.5" cy="7.5" r="1.2"/><circle cx="15" cy="7.5" r="1.2"/>'),
 };
 
@@ -28,6 +29,7 @@ const BUTTONS = [
   { action: "colors", label: "Colors", toggle: true },
   { action: "favorites", label: "Favorites", toggle: true },
   { action: "image", label: "Save image", toggle: true },
+  { action: "about", label: "About ALFinity", toggle: true },
 ];
 
 /** `actions` maps action names to functions; `extra` adds text buttons (e.g. debug tools). */

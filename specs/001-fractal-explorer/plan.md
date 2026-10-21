@@ -101,6 +101,7 @@ js/
 ├── storage.js             # localStorage favorites/palettes/last setting
 ├── input.js               # pointer, pinch, wheel, double-tap, keyboard
 ├── export.js              # tiled PNG image export
+├── version.js             # app version and release date (shown in About)
 ├── render/
 │   ├── renderer.js        # picks engine, progressive passes, cancellation
 │   ├── gpu.js             # WebGL2 engine
@@ -112,7 +113,8 @@ js/
     ├── colors.js          # palette gallery, sliders, custom palette editor
     ├── favorites.js       # list, save, rename, delete, import/export
     ├── julia.js           # mini-map point picker, presets
-    └── details.js         # optional math parameters
+    ├── details.js         # optional math parameters
+    └── about.js           # About panel: purpose, author, repo link, version (issue #3)
 
 tests/
 ├── view.test.js
