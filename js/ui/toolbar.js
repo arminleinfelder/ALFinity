@@ -45,7 +45,7 @@ export function createToolbar(el, actions, extra = []) {
     buttons.push(`<button type="button" class="tool tool-text" data-action="${b.action}">${b.label}</button>`);
   }
   el.innerHTML = `
-    <span class="brand surface">ALFinity</span>
+    <a class="brand surface" href="./" aria-label="Home" title="Home"><span aria-hidden="true">‹ </span>ALFinity</a>
     <div class="tools surface">${buttons.join("")}</div>`;
 
   el.addEventListener("click", (e) => {

@@ -5,15 +5,18 @@
 // "no-cache" makes the browser check each file with the server (a cheap "not modified" reply
 // when unchanged), so after an update old and new files are never mixed.
 
-const CACHE = "alfinity-v3";
+const CACHE = "alfinity-v4";
 const FILES = [
   "./",
   "index.html",
+  "explorer.html",
   "manifest.webmanifest",
   "css/app.css",
+  "css/pages.css",
   "icons/icon-192.png",
   "icons/icon-512.png",
   "icons/apple-touch-icon.png",
+  "images/background.jpg",
   "js/debug.js",
   "js/defaults.js",
   "js/export.js",
@@ -27,6 +30,7 @@ const FILES = [
   "js/render/shaders.js",
   "js/render/worker.js",
   "js/settings.js",
+  "js/site.js",
   "js/state.js",
   "js/storage.js",
   "js/ui/about.js",

@@ -6,7 +6,7 @@ export const description = "offline mode with the server stopped (desktop)";
 
 export async function run(t) {
   let page = await t.open("desktop");
-  await page.open(""); // without ?nosw, so the service worker is registered
+  await page.open("explorer.html"); // without ?nosw, so the service worker is registered
   await page.eval(`localStorage.clear(); localStorage.setItem("alfinity.favorites.v1", "[]")`);
   await page.eval("navigator.serviceWorker.ready.then(() => true)");
   await wait(1500); // let the install step cache all files
@@ -21,7 +21,7 @@ export async function run(t) {
   await t.server.stop();
   try {
     page = await t.open("desktop");
-    await page.open("");
+    await page.open("explorer.html");
     await wait(2500);
     const info = await page.eval(`({ title: document.title, buttons: document.querySelectorAll("#toolbar button").length,
       canvas: document.getElementById("view").width, controlled: !!navigator.serviceWorker.controller })`);

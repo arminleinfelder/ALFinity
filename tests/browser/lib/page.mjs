@@ -130,7 +130,7 @@ export async function openPage(ctx, deviceName = "desktop") {
     device, logs, send, on, once,
 
     /** Navigates to a path of the app (relative to the test server) or a full URL. */
-    async open(path = "?nosw") {
+    async open(path = "explorer.html?nosw") {
       const loaded = once("Page.loadEventFired");
       await send("Page.navigate", { url: new URL(path, ctx.base).href });
       await loaded;
