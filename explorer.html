@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#05070c">
+  <meta name="description" content="ALFinity – explore and color the Mandelbrot and Julia sets.">
+  <title>ALFinity</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ALFinity">
+  <link rel="stylesheet" href="css/app.css">
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <canvas id="view" role="img"
+          aria-label="Fractal picture. Drag to move, pinch or scroll to zoom, double-tap to zoom in."></canvas>
+  <header id="toolbar" role="toolbar" aria-label="View controls"></header>
+  <aside id="panel" hidden></aside>
+  <div id="status" aria-live="polite"></div>
+  <noscript><p class="noscript">ALFinity needs JavaScript.</p></noscript>
+  <script>
+    // Opened as a file: browsers block the app's scripts there (see README).
+    if (location.protocol === "file:") {
+      document.getElementById("status").innerHTML =
+        '<div class="pill surface show error">Please open ALFinity through a web server: ' +
+        'run <code>python3 -m http.server 8000</code> in the folder and open localhost:8000 (see README).</div>';
+    }
+  </script>
+</body>
+</html>

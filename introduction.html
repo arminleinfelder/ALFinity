@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#05070c">
+  <meta name="description" content="What fractals are, and how the Mandelbrot set and Julia sets are made – explained without math knowledge.">
+  <title>Introduction – ALFinity</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <script type="module" src="js/site.js"></script>
+</head>
+<body>
+  <header class="page-header">
+    <a class="page-link surface" href="index.html" aria-label="Home"><span aria-hidden="true">‹&nbsp;</span>ALFinity</a>
+    <a class="page-link surface primary" href="explorer.html">Open the explorer</a>
+  </header>
+
+  <main class="page">
+    <h1>Introduction</h1>
+    <p class="lead">Where do the pictures in ALFinity come from? From one very simple rule,
+      repeated over and over. This page explains the idea in plain words. The boxes marked
+      “The math (optional)” are for the curious – you can skip them.</p>
+
+    <section>
+      <h2>What is a fractal?</h2>
+      <p>A fractal is a shape whose small parts look similar to the whole. Zoom in, and you find
+        new detail; zoom in again, and there is still more – without end.</p>
+      <p>Nature is full of shapes like this: a coastline looks just as ragged on a map as from a
+        cliff, each branch of a fern looks like a small fern, and a head of Romanesco broccoli is
+        made of smaller heads, which are made of even smaller ones.</p>
+      <p>The fractals in ALFinity are made by a computer. Each one comes from a single short rule.
+        The surprise is how much beauty such a simple rule can hold.</p>
+    </section>
+
+    <section>
+      <h2>The Mandelbrot set</h2>
+      <p>Think of the picture as a map. Every point on it stands for a number, called
+        <em>c</em>. For each point, the computer plays a little game:</p>
+      <ol>
+        <li>Start with 0.</li>
+        <li>Multiply the result by itself, then add <em>c</em>.</li>
+        <li>Repeat step 2 again and again.</li>
+      </ol>
+      <p>For some points the result always stays small, no matter how often you repeat. These
+        points belong to the <strong>Mandelbrot set</strong> and are painted black. For all other
+        points the result sooner or later grows bigger and bigger – it “runs away”. These points
+        get a color.</p>
+      <figure>
+        <img src="images/intro-mandelbrot.jpg" width="1600" height="1000"
+             alt="The whole Mandelbrot set: a black shape like a heart with a round head, surrounded by blue">
+        <figcaption>The whole Mandelbrot set. Black points stay small forever; the colors show
+          points that run away.</figcaption>
+      </figure>
+      <!-- Mandelbrot set, whole view, Ocean palette -->
+      <p class="try"><a href="explorer.html#s=eyJ2IjoxLCJ0IjoibSIsImoiOlstMC44LDAuMTU2XSwiYyI6Wy0wLjYsMCwyLjZdLCJkIjoxLCJrIjpbIm9jZWFuIiwwLDIsMSwiIzAwMDAwMCJdfQ">See it in the explorer ›</a></p>
+
+      <aside class="math">
+        <h3>The math (optional)</h3>
+        <p>The numbers are <em>complex numbers</em>: each one has two parts, which give the
+          position left–right and up–down on the map. With <var>z</var> as the running result:</p>
+        <p class="formula"><var>z</var><sub>0</sub> = 0, &nbsp;
+          <var>z</var><sub><var>n</var>+1</sub> = <var>z</var><sub><var>n</var></sub><sup>2</sup> + <var>c</var></p>
+        <p>The point <var>c</var> belongs to the Mandelbrot set if <var>z</var><sub><var>n</var></sub>
+          stays bounded for all <var>n</var>. As soon as |<var>z</var><sub><var>n</var></sub>| &gt; 2
+          it is certain that the numbers will run away, so the computer can stop there.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Zooming in</h2>
+      <p>The edge of the Mandelbrot set never gets smooth, however far you zoom in. And
+        everywhere along it, tiny copies of the whole set appear, each with its own decorations –
+        and those copies have even smaller copies around them.</p>
+      <figure>
+        <img src="images/intro-minibrot.jpg" width="1600" height="1000" loading="lazy"
+             alt="A small copy of the Mandelbrot set in red and orange colors">
+        <figcaption>About 60 times enlarged, on the left “tail” of the set: a small copy of the
+          whole Mandelbrot set.</figcaption>
+      </figure>
+      <!-- Small copy of the Mandelbrot set at -1.7685 + 0i, width 0.05, Fire palette -->
+      <p class="try"><a href="explorer.html#s=eyJ2IjoxLCJ0IjoibSIsImoiOlstMC44LDAuMTU2XSwiYyI6Wy0xLjc2ODUsMCwwLjA1XSwiZCI6MSwiayI6WyJmaXJlIiwwLDIsMSwiIzAwMDAwMCJdfQ">See it in the explorer ›</a></p>
+    </section>
+
+    <section>
+      <h2>Julia sets</h2>
+      <p>Julia sets use exactly the same rule, but turn the game around: now the number
+        <em>c</em> is chosen once and stays the same for the whole picture. Instead, every point
+        of the picture is the <em>starting value</em>. Again, points whose results stay small are
+        black, and the others get a color.</p>
+      <p>Every <em>c</em> gives a different shape – there are infinitely many Julia sets. In
+        ALFinity you choose <em>c</em> in the <strong>Shape</strong> panel, either from named
+        shapes or by tapping a point on a small map of the Mandelbrot set.</p>
+      <p>And here is the link between the two: if <em>c</em> lies <strong>inside</strong> the
+        Mandelbrot set, its Julia set is one connected shape. If <em>c</em> lies
+        <strong>outside</strong>, the Julia set falls apart into infinitely many tiny pieces, like
+        dust. So the Mandelbrot set is also a map of all Julia sets.</p>
+      <figure>
+        <img src="images/intro-julia-connected.jpg" width="1600" height="1000" loading="lazy"
+             alt="A Julia set shaped like a dragon, in blue and gold">
+        <figcaption>c = −0.8 + 0.156i lies inside the Mandelbrot set: the Julia set is one
+          connected “dragon”.</figcaption>
+      </figure>
+      <!-- Julia set "Dragon", c = -0.8 + 0.156i, Ocean palette -->
+      <p class="try"><a href="explorer.html#s=eyJ2IjoxLCJ0IjoiaiIsImoiOlstMC44LDAuMTU2XSwiYyI6WzAsMCwyLjRdLCJkIjoxLCJrIjpbIm9jZWFuIiwwLDIsMSwiIzAwMDAwMCJdfQ">See it in the explorer ›</a></p>
+      <figure>
+        <img src="images/intro-julia-dust.jpg" width="1600" height="1000" loading="lazy"
+             alt="A Julia set of orange spirals on purple, without any black area">
+        <figcaption>c = −0.75 + 0.15i lies just outside the Mandelbrot set: the shape has no
+          black inside any more – it is fine dust, arranged in spirals.</figcaption>
+      </figure>
+      <!-- Julia set, c = -0.75 + 0.15i (outside the Mandelbrot set), Sunset palette -->
+      <p class="try"><a href="explorer.html#s=eyJ2IjoxLCJ0IjoiaiIsImoiOlstMC43NSwwLjE1XSwiYyI6WzAsMCwyLjZdLCJkIjoxLCJrIjpbInN1bnNldCIsMCwyLDEsIiMwMDAwMDAiXX0">See it in the explorer ›</a></p>
+
+      <aside class="math">
+        <h3>The math (optional)</h3>
+        <p>For a Julia set, <var>c</var> is fixed and the starting value is the point
+          <var>p</var> of the picture:</p>
+        <p class="formula"><var>z</var><sub>0</sub> = <var>p</var>, &nbsp;
+          <var>z</var><sub><var>n</var>+1</sub> = <var>z</var><sub><var>n</var></sub><sup>2</sup> + <var>c</var></p>
+        <p>Strictly speaking, the Julia set is the <em>edge</em> of the black area (or the dust
+          itself); the black area inside is called the filled Julia set. The Julia set for
+          <var>c</var> is connected exactly when <var>c</var> belongs to the Mandelbrot set.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>What do the colors mean?</h2>
+      <p>The color of a point shows <strong>how quickly</strong> it runs away: the computer
+        counts how many repeats it takes until the result is clearly too big. Points that run
+        away after a few steps get one color, points that take longer get the next color of the
+        palette, and so on. Black means: it never ran away, even after many hundreds of repeats.</p>
+      <p>With <em>smooth colors</em> ALFinity also uses how far a point got past the limit, so
+        the colors blend without visible steps. With smooth colors off you see the steps as
+        bands.</p>
+      <p>Which colors are used is pure decoration: the palette, color shift and density are
+        artistic choices. The shape itself always stays the same – so play with them freely.</p>
+    </section>
+
+    <section>
+      <h2>Read more</h2>
+      <ul>
+        <li><a href="https://en.wikipedia.org/wiki/Fractal" target="_blank" rel="noopener">Fractal</a> – Wikipedia</li>
+        <li><a href="https://en.wikipedia.org/wiki/Mandelbrot_set" target="_blank" rel="noopener">Mandelbrot set</a> – Wikipedia</li>
+        <li><a href="https://en.wikipedia.org/wiki/Julia_set" target="_blank" rel="noopener">Julia set</a> – Wikipedia</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <nav aria-label="Pages">
+      <a href="index.html">Home</a>
+      <a href="introduction.html">Introduction</a>
+      <a href="explorer.html">Explorer</a>
+      <a href="credits.html">Credits</a>
+      <a href="about-me.html">About me</a>
+    </nav>
+    <p>ALFinity <span data-version></span></p>
+  </footer>
+</body>
+</html>

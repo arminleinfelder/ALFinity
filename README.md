@@ -1,12 +1,24 @@
 # ALFinity
 
-![The Mandelbrot set in golden colors, drawn with ALFinity](docs/banner.jpg)
+![The Mandelbrot set in golden colors, drawn with ALFinity](images/banner.jpg)
+
+**[▶ Try ALFinity in your browser](https://arminleinfelder.github.io/ALFinity/)** – no installation
+needed, works on phone, tablet and desktop.
 
 ALFinity is a fractal explorer for the browser. Zoom into the Mandelbrot set, discover Julia
 sets, play with colors and keep your favorite pictures, with no math knowledge needed. It
 works on iPhone, iPad and desktop up to 4K screens.
 
 It is plain HTML, CSS and JavaScript: no libraries, no build step.
+
+## Pages
+
+- **Home**: the start page with the menu.
+- **Introduction**: what fractals are and how the Mandelbrot and Julia sets are made, in plain
+  words, with optional formulas and examples that open in the explorer.
+- **Explorer**: the fractal explorer itself (`explorer.html`).
+- **Credits**: the mathematicians, tools and sources behind ALFinity.
+- **About me**: about the author.
 
 ## Features
 
@@ -34,7 +46,8 @@ cd ALFinity
 python3 -m http.server 8000
 ```
 
-Then open <http://localhost:8000>.
+Then open <http://localhost:8000> for the home page, or <http://localhost:8000/explorer.html>
+for the explorer directly.
 
 **On iPhone / iPad**: keep the server running, connect the device to the same Wi-Fi and open
 `http://<your Mac's IP>:8000`. Find the IP under System Settings → Wi-Fi → Details, or with:
@@ -69,7 +82,8 @@ node --test "tests/*.test.js"
 
 ### Browser tests
 
-The whole app (rendering, gestures, panels, favorites, exports, offline mode) is tested
+The whole app (rendering, gestures, panels, favorites, exports, offline mode, home and info
+pages, old share links) is tested
 automatically in Chrome at desktop, 4K, iPad and iPhone sizes:
 
 ```bash
@@ -94,11 +108,27 @@ Real iPhones and iPads (Safari) still need a manual check with
 - `?nosw` turns off the offline service worker. It uses "network first", so during
   development you always get the newest files when the server is running.
 - When adding or renaming a file, add it to the list in `sw.js` and bump `CACHE`.
+- Share links made with version 1.1 point to the main address; the home page forwards them to
+  `explorer.html` ([contract](specs/002-home-and-info-pages/contracts/pages.md)).
+- The home page background is `images/background.jpg` (2560 px wide, subject near the
+  center). To replace it with a new picture (the large original stays outside the repository):
+
+  ```bash
+  sips -Z 2560 -s format jpeg -s formatOptions 65 /path/to/original.png --out images/background.jpg
+  ```
 - `node scripts/make-icons.mjs` redraws the app icons in `icons/`.
+- The texts of the Introduction, Credits and About me pages are written in
+  [docs/introduction.md](docs/introduction.md), [docs/credits.md](docs/credits.md) and
+  [docs/about.md](docs/about.md); the HTML pages are derived from them (`docs/` is not
+  published).
 
 ## Project documents
 
-The specification, plan and task list are in [specs/001-fractal-explorer](specs/001-fractal-explorer/).
+The specification, plan and task list of each feature are in `specs/`:
+
+- [001-fractal-explorer](specs/001-fractal-explorer/): the explorer (versions 1.0 and 1.1)
+- [002-home-and-info-pages](specs/002-home-and-info-pages/): home page, introduction, credits
+  and about me (version 1.2)
 
 ## Learning project
 

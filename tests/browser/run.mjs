@@ -16,7 +16,7 @@ import { launchChrome } from "./lib/chrome.mjs";
 import { startServer } from "./lib/server.mjs";
 import { openPage } from "./lib/page.mjs";
 
-const SUITES = ["load", "explore", "panels", "touch", "rendering", "offline"]; // offline must be last
+const SUITES = ["load", "explore", "panels", "touch", "rendering", "pages", "offline"]; // offline must be last
 const ROOT = fileURLToPath(new URL("../../", import.meta.url));
 const OUTPUT = fileURLToPath(new URL("./output/", import.meta.url));
 

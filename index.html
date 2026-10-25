@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <script>
+    // A share link to the main address (made with version 1.1) opens the explorer directly.
+    if (location.hash.startsWith("#s=")) location.replace("explorer.html" + location.search + location.hash);
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#05070c">
   <meta name="description" content="ALFinity – explore and color the Mandelbrot and Julia sets.">
@@ -14,22 +18,35 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="ALFinity">
   <link rel="stylesheet" href="css/app.css">
-  <script type="module" src="js/main.js"></script>
+  <link rel="stylesheet" href="css/pages.css">
+  <script type="module" src="js/site.js"></script>
 </head>
 <body>
-  <canvas id="view" role="img"
-          aria-label="Fractal picture. Drag to move, pinch or scroll to zoom, double-tap to zoom in."></canvas>
-  <header id="toolbar" role="toolbar" aria-label="View controls"></header>
-  <aside id="panel" hidden></aside>
-  <div id="status" aria-live="polite"></div>
-  <noscript><p class="noscript">ALFinity needs JavaScript.</p></noscript>
-  <script>
-    // Opened as a file: browsers block the app's scripts there (see README).
-    if (location.protocol === "file:") {
-      document.getElementById("status").innerHTML =
-        '<div class="pill surface show error">Please open ALFinity through a web server: ' +
-        'run <code>python3 -m http.server 8000</code> in the folder and open localhost:8000 (see README).</div>';
-    }
-  </script>
+  <main class="home">
+    <div class="home-title">
+      <h1>ALFinity</h1>
+      <p class="tagline">Explore the endless beauty of fractals.</p>
+    </div>
+    <nav class="home-menu" aria-label="Main menu">
+      <a class="surface" href="introduction.html">
+        <span class="menu-title">Introduction</span>
+        <span class="menu-text">What fractals are and how they are made</span>
+      </a>
+      <a class="surface" href="explorer.html">
+        <span class="menu-title">Explorer</span>
+        <span class="menu-text">Zoom, color and save your own pictures</span>
+      </a>
+      <a class="surface" href="credits.html">
+        <span class="menu-title">Credits</span>
+        <span class="menu-text">The people and tools behind ALFinity</span>
+      </a>
+      <a class="surface" href="about-me.html">
+        <span class="menu-title">About me</span>
+        <span class="menu-text">Who made this</span>
+      </a>
+    </nav>
+    <p class="home-footer">Version <span data-version></span> ·
+      <a href="https://github.com/arminleinfelder/ALFinity" target="_blank" rel="noopener">Source code</a></p>
+  </main>
 </body>
 </html>

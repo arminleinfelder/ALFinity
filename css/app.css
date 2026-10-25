@@ -79,7 +79,11 @@ html, body {
   font-size: 1rem;
   letter-spacing: 0.03em;
   white-space: nowrap;
+  color: inherit;
+  text-decoration: none;
 }
+.brand:hover { border-color: var(--accent); }
+.brand:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
 .tools {
   display: flex;
@@ -512,8 +516,8 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; }
 
 /* ---- Responsive sizing ---- */
 
-/* Narrow screens: the name moves to the bottom center so all buttons fit in one row at the
-   top; messages appear above it, and an open bottom sheet covers it. */
+/* Narrow screens: the name (the link home) moves to the bottom center so all buttons fit in
+   one row at the top; messages appear above it, and an open bottom sheet covers it. */
 @media (max-width: 640px) {
   #toolbar { justify-content: center; }
   .brand {
@@ -521,7 +525,6 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; }
     left: 50%;
     bottom: calc(env(safe-area-inset-bottom) + var(--edge));
     transform: translateX(-50%);
-    pointer-events: none; /* gestures pass through to the picture */
   }
   #status { bottom: calc(env(safe-area-inset-bottom) + var(--edge) + 3rem); }
 }
