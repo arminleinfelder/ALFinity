@@ -117,6 +117,10 @@ Real iPhones and iPads (Safari) still need a manual check with
   sips -Z 2560 -s format jpeg -s formatOptions 65 /path/to/original.png --out images/background.jpg
   ```
 - `node scripts/make-icons.mjs` redraws the app icons in `icons/`.
+- The texts of the Introduction, Credits and About me pages are written in
+  [docs/introduction.md](docs/introduction.md), [docs/credits.md](docs/credits.md) and
+  [docs/about.md](docs/about.md); the HTML pages are derived from them (`docs/` is not
+  published).
 
 ## Project documents
 
