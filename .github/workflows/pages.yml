@@ -1,5 +1,6 @@
 # Publishes ALFinity to GitHub Pages whenever main changes.
-# Only the app files are published (not specs/, tests/, scripts/ or .specify/).
+# Only the app files are published (not specs/, tests/, scripts/ or .specify/), and of
+# images/ only the JPEG files (not the large background.png original).
 # One-time setup: repository Settings → Pages → Source: "GitHub Actions".
 
 name: Deploy to GitHub Pages
@@ -35,7 +36,9 @@ jobs:
       - name: Collect app files
         run: |
           mkdir _site
-          cp -R index.html manifest.webmanifest sw.js css js icons _site/
+          cp -R *.html manifest.webmanifest sw.js css js icons _site/
+          mkdir _site/images
+          cp images/*.jpg _site/images/
 
       - uses: actions/configure-pages@v5
 

@@ -31,9 +31,10 @@ a:focus-visible, .page-link:focus-visible {
     max(1rem, env(safe-area-inset-right))
     calc(env(safe-area-inset-bottom) + 1rem)
     max(1rem, env(safe-area-inset-left));
-  /* The picture is bright and busy: darken it so the text stays readable (FR-008). */
+  /* The picture is bright and busy: darken it behind the text so it stays readable (FR-008),
+     less towards the edges so the picture still shines. */
   background:
-    radial-gradient(ellipse at center, rgba(5, 7, 12, 0.55), rgba(5, 7, 12, 0.85)),
+    radial-gradient(ellipse at center, rgba(5, 7, 12, 0.7) 25%, rgba(5, 7, 12, 0.3)),
     var(--bg) url("../images/background.jpg") center / cover no-repeat;
   text-align: center;
 }
