@@ -179,7 +179,7 @@ opens https://arminleinfelder.github.io/ALFinity/.
 - [X] T033 [P] Update `README.md`: "Run it" mentions the home page and that the explorer is at `explorer.html`; a short "Pages" list (Home, Introduction, Explorer, Credits, About me); developer note on replacing `images/background.jpg` (quickstart.md, "Replacing the background picture"); "Project documents" links both `specs/001-fractal-explorer` and `specs/002-home-and-info-pages`; browser-test list mentions the new `pages` suite
 - [X] T034 Run the full suite `node --test "tests/*.test.js"` and `node tests/browser/run.mjs`; all checks pass
 - [ ] T035 Walk through [quickstart.md](quickstart.md) manual checks 1–13 at phone, tablet and 4K desktop sizes (Constitution, Development Workflow); note anything that needs real-device Safari for the owner
-- [ ] T036 Ask the owner to review the introduction and credits texts, then mark all tasks done in this file
+- [X] T036 Ask the owner to review the introduction and credits texts, then mark all tasks done in this file
 
 ---
 

@@ -170,11 +170,13 @@ export async function run(t) {
   t.check("credits: Mathematicians, Tools and Sources", JSON.stringify(groups) === JSON.stringify(["Mathematicians", "Tools", "Sources"]),
     groups.join(", "));
 
-  // ---- US5: about me placeholders are marked ----
+  // ---- US5: about me shows the profile ----
   await page.open("about-me.html?nosw");
-  const marked = await page.eval(`[...document.querySelectorAll(".placeholder")]
-    .map((el) => getComputedStyle(el, "::before").content.includes("Placeholder"))`);
-  t.check("about me: every placeholder is visibly marked", marked.length > 0 && marked.every(Boolean), `${marked.length} placeholders`);
+  const profile = await page.eval(`({ paragraphs: document.querySelectorAll("main p").length,
+    links: [...document.querySelectorAll(".profile-links a")].map((a) => a.hostname),
+    placeholders: document.querySelectorAll(".placeholder").length })`);
+  t.check("about me: bio and links, no placeholders left",
+    profile.paragraphs >= 5 && profile.links.length === 3 && profile.placeholders === 0, JSON.stringify(profile));
 
   t.noProblems(page);
   await page.close();

@@ -7,25 +7,27 @@
 
 # About me
 
-## Photo
+Hi I'm Armin Leinfelder
 
-PLACEHOLDER – put a photo file next to this one (e.g. `docs/about-me.jpg`) and write its
-name here, or delete this section for no photo.
+Back to the Roots. Into Infinity.
 
-## Name
+I’ve always had a passion for mathematics.
 
-Armin Leinfelder
+Many years ago, while studying mathematics and computer science, I discovered the fascinating world of fractals. I was so intrigued that I started coding my own visualizations of the Mandelbrot set and other mathematical wonders.
 
-## Bio
+Then life took me on a different journey — from software developer to product manager. Along the way, I gradually stopped writing code.
 
-PLACEHOLDER – a few sentences about me: who I am, what I do and why I built ALFinity.
+Fast-forward a few decades: Thanks to AI-powered vibe coding, I’ve rediscovered the joy of programming. And here I am, exploring fractals once again!
+
+ALFinity is my first larger app project, built using a spec-driven development approach.
+
+Same curiosity. New tools. Infinite possibilities.
+
 
 ## Links
 
-PLACEHOLDER – one link per line, for example:
-
-- LinkedIn: https://…
-- Website: https://…
-- E-mail: name@example.com
+- LinkedIn: https://www.linkedin.com/in/armin-leinfelder/
+- Instagram: https://www.instagram.com/armin.ai.tales 
+- GitHub: https://github.com/arminleinfelder
 
 The source code of ALFinity is on [GitHub](https://github.com/arminleinfelder/ALFinity).
