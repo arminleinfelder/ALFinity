@@ -110,11 +110,11 @@ Real iPhones and iPads (Safari) still need a manual check with
 - When adding or renaming a file, add it to the list in `sw.js` and bump `CACHE`.
 - Share links made with version 1.1 point to the main address; the home page forwards them to
   `explorer.html` ([contract](specs/002-home-and-info-pages/contracts/pages.md)).
-- The home page background is `images/background.jpg`, a web copy of the original
-  `images/background.png` (only the JPEG files in `images/` are published). To replace it:
+- The home page background is `images/background.jpg` (2560 px wide, subject near the
+  center). To replace it with a new picture (the large original stays outside the repository):
 
   ```bash
-  sips -Z 2560 -s format jpeg -s formatOptions 65 images/background.png --out images/background.jpg
+  sips -Z 2560 -s format jpeg -s formatOptions 65 /path/to/original.png --out images/background.jpg
   ```
 - `node scripts/make-icons.mjs` redraws the app icons in `icons/`.
 

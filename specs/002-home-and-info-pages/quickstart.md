@@ -43,8 +43,12 @@ Expected: all checks pass; screenshots of every page and device in
 
 ## Replacing the background picture
 
-Keep the original as `images/background.png` and save a web copy as `images/background.jpg`
-(`sips -Z 2560 -s format jpeg -s formatOptions 65 images/background.png --out images/background.jpg`;
-at least 2560 px wide, subject near the
-center) and reload. No other change is needed: the file name stays the same, and the
-offline copy picks up the new picture on the next online visit.
+Use a picture at least 2560 px wide with the subject near the center. Save a web copy as
+`images/background.jpg` (the large original stays outside the repository):
+
+```bash
+sips -Z 2560 -s format jpeg -s formatOptions 65 /path/to/original.png --out images/background.jpg
+```
+
+Reload. No other change is needed: the file name stays the same, and the offline copy picks
+up the new picture on the next online visit.

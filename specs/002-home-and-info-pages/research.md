@@ -57,17 +57,16 @@ eight 42 px buttons in one row; a ninth would not fit (the load test checks this
 ## R4 – Background picture: the owner's picture as a 2560 px JPEG, `cover`, dark overlay
 
 **Decision** (updated 2026-10-25 when the owner supplied `background.png`, 3840 × 2160,
-15 MB): the original stays in `images/background.png` (not deployed); the page uses
+15 MB): the original is not stored in the repository; the page uses
 `images/background.jpg`, scaled to 2560 × 1440, JPEG quality 65 (≈ 1.5 MB; at 3840 px it
-would be 3–4.5 MB because of the fine detail), shown with `background-size: cover` and centered. A dark gradient over the
-picture keeps the title and menu readable (FR-008). Until the owner's picture arrives, a
-Mandelbrot or Julia picture is made with ALFinity's own "Save image" (custom size). The
-owner's picture replaces the file with the same name (FR-007); recommended: at least
-2560 px wide, with the main subject near the center because phones in portrait show only
-the middle strip.
+would be 3–4.5 MB because of the fine detail), shown with `background-size: cover` and
+centered. A dark gradient over the picture keeps the title and menu readable (FR-008). A
+new picture replaces the file with the same name (FR-007); recommended: at least 2560 px
+wide, with the main subject near the center because phones in portrait show only the
+middle strip.
 
-**Rationale**: 3840 px is sharp on 4K and Retina laptops; one file keeps replacing it
-trivial. A CSS background loads in parallel, so the menu is usable before the picture
+**Rationale**: 2560 px stays sharp enough on 4K behind the dark overlay at a tenth of the
+original's size; one file keeps replacing it trivial. A CSS background loads in parallel, so the menu is usable before the picture
 arrives (SC-002, edge case "picture slow or missing": the page background color stays).
 
 **Alternatives considered**:

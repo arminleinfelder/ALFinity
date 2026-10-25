@@ -94,7 +94,6 @@ js/
 ├── version.js          # 1.2.0
 └── …                   # explorer modules unchanged
 images/                 # NEW, deployed
-├── background.png      # owner's original background (3840 × 2160, not deployed)
 ├── background.jpg      # web copy shown on the home page, replaceable (R4)
 ├── banner.jpg, …       # README pictures (folder renamed from docs/)
 └── intro-*.jpg         # 4 introduction pictures (R9)
