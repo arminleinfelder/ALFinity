@@ -98,7 +98,7 @@ images/                 # NEW, deployed
 └── intro-*.jpg         # 4 introduction pictures (R9)
 sw.js                   # new files listed, CACHE = alfinity-v4 (R6)
 manifest.webmanifest    # unchanged: start_url "./" now opens home (FR-005)
-.github/workflows/deploy.yml  # also copies *.html and images/
+.github/workflows/pages.yml   # also copies *.html and images/
 README.md               # "Try ALFinity" link below the banner (FR-020); docs updated
 tests/browser/
 ├── lib/page.mjs        # default path explorer.html?nosw (R10)
