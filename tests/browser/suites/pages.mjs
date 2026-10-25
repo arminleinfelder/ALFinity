@@ -84,8 +84,8 @@ export async function run(t) {
       external: [...document.querySelectorAll('a[href^="http"]')].every((a) => a.target === "_blank" && a.rel.includes("noopener")),
     })`);
     t.check(`${file}: links home and to the explorer, footer menu marks this page`,
-      nav.home === "./" && nav.explorer === "explorer.html" &&
-      JSON.stringify(nav.footer) === JSON.stringify(["./", ...MENU.map((m) => m[1])]) && nav.current === file,
+      nav.home === "index.html" && nav.explorer === "explorer.html" &&
+      JSON.stringify(nav.footer) === JSON.stringify(["index.html", ...MENU.map((m) => m[1])]) && nav.current === file,
       JSON.stringify(nav.footer));
     t.check(`${file}: own title, external links open in a new tab`, nav.title.endsWith("– ALFinity") && nav.external, nav.title);
   }

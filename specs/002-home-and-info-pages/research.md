@@ -41,7 +41,8 @@ and removes the fragment exactly as today (contracts in 001 unchanged).
 ## R3 – Way back home from the explorer: the "ALFinity" name becomes a link
 
 **Decision**: The toolbar's existing "ALFinity" label becomes a link to the home page
-(`./`), shown as "‹ ALFinity" with the accessible name and tooltip "Home". On narrow
+(`index.html` rather than `./`, so it also works when the files are opened directly
+from disk), shown as "‹ ALFinity" with the accessible name and tooltip "Home". On narrow
 screens it stays at the bottom center (as in 1.1) but now accepts taps; it is a small
 pill, so gestures elsewhere still reach the picture.
 

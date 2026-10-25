@@ -16,6 +16,5 @@ for (const el of document.querySelectorAll("[data-version]")) {
 
 const current = location.pathname.split("/").pop() || "index.html";
 for (const link of document.querySelectorAll(".site-footer a")) {
-  const target = link.getAttribute("href").replace(/^\.\/$/, "index.html");
-  if (target === current) link.setAttribute("aria-current", "page");
+  if (link.getAttribute("href") === current) link.setAttribute("aria-current", "page");
 }
