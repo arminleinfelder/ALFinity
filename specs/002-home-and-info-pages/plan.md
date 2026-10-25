@@ -94,7 +94,9 @@ js/
 ├── version.js          # 1.2.0
 └── …                   # explorer modules unchanged
 images/                 # NEW, deployed
-├── home.jpg            # background, replaceable (R4)
+├── background.png      # owner's original background (3840 × 2160, not deployed)
+├── background.jpg      # web copy shown on the home page, replaceable (R4)
+├── banner.jpg, …       # README pictures (folder renamed from docs/)
 └── intro-*.jpg         # 4 introduction pictures (R9)
 sw.js                   # new files listed, CACHE = alfinity-v4 (R6)
 manifest.webmanifest    # unchanged: start_url "./" now opens home (FR-005)
@@ -111,7 +113,8 @@ tests/browser/
 **Structure Decision**: Keep the existing flat static layout (one folder, no build). The
 explorer keeps its own HTML and modules; the new pages are siblings at the root so
 relative links and the service-worker scope stay simple. Images for pages live in a new
-`images/` folder that is deployed (`docs/` stays README-only).
+`images/` folder (renamed from `docs/`, which held the README pictures); only its
+JPEG files are deployed.
 
 ## Implementation Notes
 

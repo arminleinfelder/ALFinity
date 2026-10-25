@@ -54,10 +54,12 @@ eight 42 px buttons in one row; a ninth would not fit (the load test checks this
   already used by "Reset view", so it would also need a new reset icon.
 - *A "Home" entry in the About panel*: two taps and hard to find.
 
-## R4 – Background picture: one 3840 × 2160 JPEG, `cover`, dark overlay
+## R4 – Background picture: the owner's picture as a 2560 px JPEG, `cover`, dark overlay
 
-**Decision**: `images/home.jpg`, 3840 × 2160 (16:9), JPEG quality about 80 (target
-under 900 KB), shown with `background-size: cover` and centered. A dark gradient over the
+**Decision** (updated 2026-10-25 when the owner supplied `background.png`, 3840 × 2160,
+15 MB): the original stays in `images/background.png` (not deployed); the page uses
+`images/background.jpg`, scaled to 2560 × 1440, JPEG quality 65 (≈ 1.5 MB; at 3840 px it
+would be 3–4.5 MB because of the fine detail), shown with `background-size: cover` and centered. A dark gradient over the
 picture keeps the title and menu readable (FR-008). Until the owner's picture arrives, a
 Mandelbrot or Julia picture is made with ALFinity's own "Save image" (custom size). The
 owner's picture replaces the file with the same name (FR-007); recommended: at least
@@ -71,7 +73,7 @@ arrives (SC-002, edge case "picture slow or missing": the page background color 
 **Alternatives considered**:
 - *Several sizes with `srcset`/`image-set`*: smaller downloads on phones, but the owner
   would have to produce and replace several files. Can be added later if needed.
-- *Reuse `docs/banner.jpg`*: 3.2 : 1 is too wide; a portrait phone would show a sliver.
+- *Reuse `images/banner.jpg`*: 3.2 : 1 is too wide; a portrait phone would show a sliver.
 - *Render a live fractal on the home page*: would load WebGL and the workers on the
   home page; slower start, more code.
 
@@ -146,8 +148,8 @@ offline and send nothing to other servers (FR-018).
 
 **Alternatives considered**:
 - *Images from Wikipedia*: external loads and licensing notes; not offline.
-- *Reuse `docs/` pictures*: they are 0.2–0.8 MB at sizes meant for the README; `docs/`
-  is also not deployed.
+- *Reuse the README pictures* (`banner.jpg`, `julia.jpg`, `mandelbrot.jpg`): they are
+  0.2–0.8 MB at sizes meant for the README.
 
 ## R10 – Tests
 

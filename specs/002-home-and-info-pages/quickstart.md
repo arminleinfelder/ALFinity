@@ -43,6 +43,8 @@ Expected: all checks pass; screenshots of every page and device in
 
 ## Replacing the background picture
 
-Save the new picture as `images/home.jpg` (at least 2560 px wide, subject near the
+Keep the original as `images/background.png` and save a web copy as `images/background.jpg`
+(`sips -Z 2560 -s format jpeg -s formatOptions 65 images/background.png --out images/background.jpg`;
+at least 2560 px wide, subject near the
 center) and reload. No other change is needed: the file name stays the same, and the
 offline copy picks up the new picture on the next online visit.

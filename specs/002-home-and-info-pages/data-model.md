@@ -30,8 +30,8 @@ Explorer: "‹ ALFinity" → Home
 
 | Field | Value |
 |---|---|
-| file | `images/home.jpg` (the only file to replace, FR-007) |
-| size | 3840 × 2160 recommended, at least 2560 px wide; main subject near the center |
+| file | `images/background.jpg` (the only file to replace, FR-007), made from the owner's `images/background.png` |
+| size | 2560 × 1440, JPEG quality 65 (≈ 1.5 MB); original 3840 × 2160; main subject near the center |
 | fallback | page background color `--bg` while loading or if missing |
 
 ## Explorer example link

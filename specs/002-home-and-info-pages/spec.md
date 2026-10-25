@@ -300,7 +300,7 @@ without scrolling past the banner and opens the hosted app.
   unchanged.
 - The explorer's remembered last view (already stored on the device) is what "restores
   the last view" means; nothing new is stored.
-- Example pictures in the introduction may reuse the existing pictures in `docs/`
+- Example pictures in the introduction may reuse the existing README pictures (folder `images/`, formerly `docs/`)
   or new ones made with ALFinity; no external images are used.
 - Introduction and credits texts are drafted for the owner, who reviews them before the
   release.
